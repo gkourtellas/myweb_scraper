@@ -1,4 +1,3 @@
-# notify.py
 import re
 import requests
 

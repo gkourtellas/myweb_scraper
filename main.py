@@ -1,23 +1,21 @@
+#python
 import json
 import os
 from datetime import datetime
 from playwright.sync_api import sync_playwright
 from notify import send_message
 
-# Get today's date in various formats
 today_url = datetime.today().strftime("%d-%m-%y")
 today_display_ddmm = datetime.today().strftime("%d/%m")
 today_display_ddmmyy = datetime.today().strftime("%d/%m/%y")
 today_display_mmdd = datetime.today().strftime("%m/%d")
 
-# Map format strings to actual date values
 date_formats = {
     "dd/mm": today_display_ddmm,
     "dd/mm/yy": today_display_ddmmyy,
     "mm/dd": today_display_mmdd
 }
 
-# Load sent log
 log_file = "sent_log.json"
 if os.path.exists(log_file):
     with open(log_file, "r") as f:
@@ -25,7 +23,6 @@ if os.path.exists(log_file):
 else:
     sent_log = {}
 
-# Read and parse urls.txt
 sites = []
 with open("urls.txt", "r") as f:
     lines = f.read().splitlines()
@@ -38,7 +35,6 @@ with open("urls.txt", "r") as f:
             date_format = parts[3].strip().lower() if len(parts) > 3 else ""
             sites.append((url, url_type, selector, date_format))
 
-# Start Playwright
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
     page = browser.new_page()
@@ -68,7 +64,7 @@ with sync_playwright() as p:
                         if sent_log.get(full_url) != content:
                             print("✅ Tip found for today:")
                             print(content)
-                            send_message(content)
+                            send_message(content, url=full_url)
                             sent_log[full_url] = content
                         else:
                             print("ℹ️ Tip already sent.")
@@ -78,7 +74,7 @@ with sync_playwright() as p:
                     if sent_log.get(full_url) != content:
                         print("✅ Content found:")
                         print(content)
-                        send_message(content)
+                        send_message(content, url=full_url)
                         sent_log[full_url] = content
                     else:
                         print("ℹ️ Content already sent.")
@@ -89,6 +85,5 @@ with sync_playwright() as p:
 
     browser.close()
 
-# Save updated log
 with open(log_file, "w") as f:
     json.dump(sent_log, f, indent=2)
