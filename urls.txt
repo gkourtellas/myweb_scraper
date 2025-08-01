@@ -1,2 +1,3 @@
-https://betparade.net/to-over-25-tis-imeras-|date|.entry-content table|dd/mm
-https://betclever.com/football-tips/bet-of-the-day/|static|.match-hero__card-score-text|
+https://betparade.net/to-over-25-tis-imeras-|date|.entry-content table|dd/mm|2
+https://betclever.com/football-tips/bet-of-the-day/|static|.match-hero__card-score-text|3
+https://www.surfbet.net/match-of-the-day |static| #tm-main > div.uk-section-muted.uk-section.uk-section-small > div > div > div.uk-width-expand\@s > div.uk-panel.uk-scrollspy-inview > div.uk-flex.uk-card.uk-card-default.uk-card-body.uk-card-hover.uk-margin-remove-first-child.uk-link-toggle.uk-display-block.uk-background-cover.uk-background-top-center.uk-background-blend-multiply > div|6

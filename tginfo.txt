@@ -1,2 +1,2 @@
-token: https://api.telegram.org/bot7243251377:AAECFj6DRCNrmvxknxRJNYIgppPT1o2MS6Q/getUpdates
-id: 521374790
+7243251377:AAECFj6DRCNrmvxknxRJNYIgppPT1o2MS6Q
+521374790

@@ -1,4 +1,4 @@
-#python
+# python
 import json
 import os
 from datetime import datetime
@@ -33,13 +33,14 @@ with open("urls.txt", "r") as f:
             url_type = parts[1].strip().lower()
             selector = parts[2].strip()
             date_format = parts[3].strip().lower() if len(parts) > 3 else ""
-            sites.append((url, url_type, selector, date_format))
+            lines_to_trim = int(parts[4].strip()) if len(parts) > 4 and parts[4].strip().isdigit() else 3
+            sites.append((url, url_type, selector, date_format, lines_to_trim))
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
     page = browser.new_page()
 
-    for url, url_type, selector, date_format in sites:
+    for url, url_type, selector, date_format, lines_to_trim in sites:
         full_url = f"{url}{today_url}/" if url_type == "date" else url
         print(f"\nChecking: {full_url}")
         try:
@@ -64,7 +65,7 @@ with sync_playwright() as p:
                         if sent_log.get(full_url) != content:
                             print("✅ Tip found for today:")
                             print(content)
-                            send_message(content, url=full_url)
+                            send_message(content, url=full_url, lines_to_trim=lines_to_trim)
                             sent_log[full_url] = content
                         else:
                             print("ℹ️ Tip already sent.")
@@ -74,7 +75,7 @@ with sync_playwright() as p:
                     if sent_log.get(full_url) != content:
                         print("✅ Content found:")
                         print(content)
-                        send_message(content, url=full_url)
+                        send_message(content, url=full_url, lines_to_trim=lines_to_trim)
                         sent_log[full_url] = content
                     else:
                         print("ℹ️ Content already sent.")
