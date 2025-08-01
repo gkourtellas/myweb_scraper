@@ -33,7 +33,11 @@ with open("urls.txt", "r") as f:
             url_type = parts[1].strip().lower()
             selector = parts[2].strip()
             date_format = parts[3].strip().lower() if len(parts) > 3 else ""
-            lines_to_trim = int(parts[4].strip()) if len(parts) > 4 and parts[4].strip().isdigit() else 3
+            lines_to_trim = (
+                int(parts[4].strip()) if len(parts) > 4 and parts[4].strip().isdigit()
+                else int(parts[3].strip()) if len(parts) > 3 and parts[3].strip().isdigit()
+                else 1
+            )
             sites.append((url, url_type, selector, date_format, lines_to_trim))
 
 with sync_playwright() as p:

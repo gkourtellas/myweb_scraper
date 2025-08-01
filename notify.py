@@ -16,7 +16,7 @@ def extract_site_name(url):
     site_name = netloc.split('.')[0]
     return site_name if site_name else 'unknown'
 
-def send_message(message, url=None, tginfo_path='tginfo.txt', lines_to_trim=3):
+def send_message(message, url=None, tginfo_path='tginfo.txt', lines_to_trim=10):
     trimmed_message = "\n".join(message.splitlines()[:lines_to_trim])
     token, chat_id = read_telegram_info(tginfo_path)
     if url:
