@@ -5,6 +5,14 @@ from datetime import datetime
 from playwright.sync_api import sync_playwright
 from notify import send_message
 
+def clear_log_daily(log_file):
+    if os.path.exists(log_file):
+        last_modified = datetime.fromtimestamp(os.path.getmtime(log_file))
+        today = datetime.today().date()
+        if last_modified.date() != today:
+            with open(log_file, "w") as f:
+                json.dump({}, f)
+
 def check_sites():
     today_url = datetime.today().strftime("%d-%m-%y")
     today_display_ddmm = datetime.today().strftime("%d/%m")
@@ -18,6 +26,8 @@ def check_sites():
     }
 
     log_file = "sent_log.json"
+    clear_log_daily(log_file)
+
     if os.path.exists(log_file):
         with open(log_file, "r") as f:
             sent_log = json.load(f)
@@ -98,4 +108,4 @@ if __name__ == "__main__":
     while True:
         check_sites()
         print("Sleeping for 100 minutes...")
-        time.sleep(6000)  # 6000 seconds = 100 minutes
+        time.sleep(600)  # 6000 seconds = 100 minutes
