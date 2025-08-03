@@ -48,7 +48,8 @@ The script will check all sites and repeat every 100 minutes.
 
 Running as a Service
 To run automatically on startup, create a systemd service file pointing to your virtual environment's Python and main.py.
-
+Check Status
+sudo systemctl status mywebscraper
 
 File Overview
 main.py — Main scraping script
