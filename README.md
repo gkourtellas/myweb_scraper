@@ -50,6 +50,8 @@ Running as a Service
 To run automatically on startup, create a systemd service file pointing to your virtual environment's Python and main.py.
 Check Status
 sudo systemctl status mywebscraper
+transfer files from windows to linux
+C:\Users\Games\PycharmProjects\myweb_scraper>scp *.py gk@192.168.10.29:/home/gk/myweb_scraper
 
 File Overview
 main.py — Main scraping script
