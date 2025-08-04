@@ -14,7 +14,17 @@ def clear_log_daily(log_file):
             with open(log_file, "w") as f:
                 json.dump({}, f)
 
-# Main function to check all sites listed in urls.txt
+# Load or initialize the last sent log (persistent)
+def load_last_sent(file_name):
+    if os.path.exists(file_name):
+        with open(file_name, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+def save_last_sent(file_name, data):
+    with open(file_name, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
 def check_sites():
     today_url = datetime.today().strftime("%d-%m-%y")
     today_display_ddmm = datetime.today().strftime("%d/%m")
@@ -28,13 +38,17 @@ def check_sites():
     }
 
     log_file = "sent_log.json"
+    last_sent_file = "last_sent.json"
     clear_log_daily(log_file)
 
+    # Load logs
     if os.path.exists(log_file):
         with open(log_file, "r") as f:
             sent_log = json.load(f)
     else:
         sent_log = {}
+
+    last_sent = load_last_sent(last_sent_file)
 
     sites = []
     with open("urls.txt", "r") as f:
@@ -62,7 +76,6 @@ def check_sites():
             print(f"\nChecking: {full_url}")
             try:
                 page.goto(full_url, timeout=60000)
-                # Split selectors by comma and strip whitespace
                 selectors = [s.strip() for s in selector.split(",")]
                 contents = []
                 for sel in selectors:
@@ -84,26 +97,31 @@ def check_sites():
                 combined_content = "\n".join(contents)
                 print("🔍 Raw content:", combined_content)
 
+                should_send = False
                 if date_format:
                     expected_date = date_formats.get(date_format, "")
                     if expected_date in combined_content:
-                        if sent_log.get(full_url) != combined_content:
+                        should_send = last_sent.get(full_url) != combined_content
+                        if should_send:
                             print("✅ Tip found for today:")
                             print(combined_content)
-                            send_message(combined_content, url=full_url, lines_to_trim=lines_to_trim)
-                            sent_log[full_url] = combined_content
                         else:
                             print("ℹ️ Tip already sent.")
                     else:
                         print("❌ No Tip Today")
                 else:
-                    if sent_log.get(full_url) != combined_content:
+                    should_send = last_sent.get(full_url) != combined_content
+                    if should_send:
                         print("✅ Content found:")
                         print(combined_content)
-                        send_message(combined_content, url=full_url, lines_to_trim=lines_to_trim)
-                        sent_log[full_url] = combined_content
                     else:
                         print("ℹ️ Content already sent.")
+
+                if should_send:
+                    send_message(combined_content, url=full_url, lines_to_trim=lines_to_trim)
+                    last_sent[full_url] = combined_content
+                    sent_log[full_url] = combined_content
+
             except Exception as e:
                 print(f"Error accessing {full_url}: {e}")
 
@@ -111,6 +129,7 @@ def check_sites():
 
     with open(log_file, "w") as f:
         json.dump(sent_log, f, indent=2)
+    save_last_sent(last_sent_file, last_sent)
 
 if __name__ == "__main__":
     while True:
