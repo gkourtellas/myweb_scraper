@@ -56,5 +56,6 @@ main.py — Main scraping script
 urls.txt — List of URLs, selectors, and options
 sent_log.json — Log of sent notifications (auto-managed)
 notify.py — Notification logic
+copy fiels to server: C:\Users\g_kourtellas\PycharmProjects\myweb_scraper>scp *.py gk@monitor:/home/gk/myweb_scraper
 License
 MIT License
