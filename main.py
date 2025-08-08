@@ -1,6 +1,7 @@
 import json
 import os
 import time
+import difflib
 from datetime import datetime
 from playwright.sync_api import sync_playwright
 from notify import send_message
@@ -24,6 +25,9 @@ def load_last_sent(file_name):
 def save_last_sent(file_name, data):
     with open(file_name, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+
+def is_mostly_same(a, b, threshold=0.9):
+    return difflib.SequenceMatcher(None, a, b).ratio() > threshold
 
 def check_sites():
     today_url = datetime.today().strftime("%d-%m-%y")
@@ -101,7 +105,9 @@ def check_sites():
                 if date_format:
                     expected_date = date_formats.get(date_format, "")
                     if expected_date in combined_content:
-                        should_send = last_sent.get(full_url) != combined_content
+                        #should_send = last_sent.get(full_url) != combined_content
+                        last_content = last_sent.get(full_url, "")
+                        should_send = not last_content or not is_mostly_same(combined_content, last_content)
                         if should_send:
                             print("✅ Tip found for today:")
                             print(combined_content)
@@ -110,7 +116,9 @@ def check_sites():
                     else:
                         print("❌ No Tip Today")
                 else:
-                    should_send = last_sent.get(full_url) != combined_content
+                    #should_send = last_sent.get(full_url) != combined_content
+                    last_content = last_sent.get(full_url, "")
+                    should_send = not last_content or not is_mostly_same(combined_content, last_content)
                     if should_send:
                         print("✅ Content found:")
                         print(combined_content)
