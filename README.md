@@ -9,6 +9,8 @@ A Python web scraper that checks a list of URLs for new content or tips using Pl
 - Detects new content or daily tips (supports date-based checks)
 - Sends notifications via a custom `notify.py` module
 - Maintains a daily log to avoid duplicate notifications
+- **Creates a new `.xlsx` log file for each month, named `tips_log_YYYY_MM.xlsx`**
+- **Log files are kept locally for now**
 
 ## Requirements
 
@@ -27,32 +29,28 @@ A Python web scraper that checks a list of URLs for new content or tips using Pl
    source venv/bin/activate
    # On Windows:
    venv\Scripts\activate
-
-   Install dependencies:
-
-
+   
+Install dependencies:  
 pip install -r requirements.txt
 playwright install
-Edit urls.txt with your target URLs and selectors.
-
-
-Configure notify.py to send notifications as needed.
-
-
+Edit urls.txt with your target URLs and selectors.  
+Configure notify.py to send notifications as needed.  
 Usage
 Run the scraper manually:
 python main.py
-
 The script will check all sites and repeat every 100 minutes.
-
-
+Each month, a new log file is created and stored locally.
+Log File Management
+Log files (tips_log_YYYY_MM.xlsx) are kept locally.
+If you want to upload a log file to your private GitHub repository manually:
+Copy the file into your repo directory.
+Run:
+git add tips_log_YYYY_MM.xlsx
+git commit -m "Add monthly tips log"
+git push origin master
+Automation for uploading log files can be added later if needed.
 Running as a Service
-To run automatically on startup, create a systemd service file pointing to your virtual environment's Python and main.py.
-Check Status
-sudo systemctl status mywebscraper
-transfer files from windows to linux
-C:\Users\Games\PycharmProjects\myweb_scraper>scp *.py gk@192.168.10.29:/home/gk/myweb_scraper
-
+To run automatically on startup, create a systemd service file pointing to your virtual environment's Python and main.py.  
 File Overview
 main.py — Main scraping script
 urls.txt — List of URLs, selectors, and options
@@ -60,5 +58,3 @@ sent_log.json — Log of sent notifications (auto-managed)
 notify.py — Notification logic
 License
 MIT License
-
-
