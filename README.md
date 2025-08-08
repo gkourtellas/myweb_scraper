@@ -29,33 +29,75 @@ A Python web scraper that checks a list of URLs for new content or tips using Pl
    source venv/bin/activate
    # On Windows:
    venv\Scripts\activate
-   
-Install dependencies:  
-pip install -r requirements.txt
-playwright install
-Edit urls.txt with your target URLs and selectors.  
-Configure notify.py to send notifications as needed.  
-Usage
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   playwright install
+   ```
+
+4. Edit `urls.txt` with your target URLs and selectors.
+
+5. Configure `notify.py` to send notifications as needed.
+
+## Usage
+
 Run the scraper manually:
+
+```bash
 python main.py
+```
+
 The script will check all sites and repeat every 100 minutes.
+
 Each month, a new log file is created and stored locally.
-Log File Management
-Log files (tips_log_YYYY_MM.xlsx) are kept locally.
+
+## Log File Management
+
+Log files (`tips_log_YYYY_MM.xlsx`) are kept locally.
+
 If you want to upload a log file to your private GitHub repository manually:
-Copy the file into your repo directory.
-Run:
+
+```bash
+# Copy the file into your repo directory.
 git add tips_log_YYYY_MM.xlsx
 git commit -m "Add monthly tips log"
 git push origin master
+```
+
 Automation for uploading log files can be added later if needed.
-Running as a Service
-To run automatically on startup, create a systemd service file pointing to your virtual environment's Python and main.py.  
-File Overview
-main.py — Main scraping script
-urls.txt — List of URLs, selectors, and options
-sent_log.json — Log of sent notifications (auto-managed)
-notify.py — Notification logic
-copy fiels to server: C:\Users\g_kourtellas\PycharmProjects\myweb_scraper>scp *.py gk@monitor:/home/gk/myweb_scraper
-License
+
+## Running as a Service
+
+To run automatically on startup, create a systemd service file pointing to your virtual environment's Python and `main.py`.
+
+## File Overview
+
+- `main.py` — Main scraping script  
+- `urls.txt` — List of URLs, selectors, and options  
+- `sent_log.json` — Log of sent notifications (auto-managed)  
+- `notify.py` — Notification logic  
+
+## Deployment Notes
+
+Copy files to server:
+
+```bash
+scp *.py gk@monitor:/home/gk/myweb_scraper
+```
+
+After copy, stop the service (it will restart automatically):
+
+```bash
+# Find the process ID
+ps aux | grep main.py
+
+# Kill it
+kill <PID>
+```
+
+## License
+
 MIT License
