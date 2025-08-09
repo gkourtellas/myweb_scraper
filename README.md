@@ -97,7 +97,15 @@ ps aux | grep main.py
 # Kill it
 kill <PID>
 ```
-
+| Command                | Description                                      |
+|------------------------|--------------------------------------------------|
+| tmux                   | Start a new tmux session                         |
+| python main.py         | Run your Python script inside tmux                |
+| Ctrl+b d               | Detach from the session (keep script running)     |
+| tmux attach            | Reattach to the session to view output            |
+| exit                   | Exit the tmux session and stop the script         |
+| tmux ls                | List all tmux sessions                            |
+| tmux kill-session -t <name> | Kill a specific session by name             |
 ## License
 
 MIT License
