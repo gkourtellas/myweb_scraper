@@ -6,6 +6,13 @@ from datetime import datetime
 from playwright.sync_api import sync_playwright
 from notify import send_message
 
+import sys
+
+sys.stdout = open('output.log', 'a', encoding='utf-8', buffering=1)
+sys.stderr = open('output.log', 'a', encoding='utf-8', buffering=1)
+
+print("Script started", flush=True)
+print("Script Started")
 # Clears the log file if it's a new day
 def clear_log_daily(log_file):
     if os.path.exists(log_file):
