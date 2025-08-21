@@ -1,0 +1,7 @@
+.idea/
+pycache/
+tginfo.txt
+tginfo.txt.bak
+tips_log_*.xlsx
+run.log
+app.pid
