@@ -27,6 +27,7 @@ def save_last_sent(file_name, data):
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 def is_mostly_same(a, b, threshold=0.9):
+    """Return True if a and b are mostly the same (similarity > threshold)."""
     return difflib.SequenceMatcher(None, a, b).ratio() > threshold
 
 def check_sites():
@@ -102,28 +103,27 @@ def check_sites():
                 print("🔍 Raw content:", combined_content)
 
                 should_send = False
+                last_content = last_sent.get(full_url, "")
                 if date_format:
                     expected_date = date_formats.get(date_format, "")
                     if expected_date in combined_content:
-                        #should_send = last_sent.get(full_url) != combined_content
-                        last_content = last_sent.get(full_url, "")
+                        # Only send if content is significantly different
                         should_send = not last_content or not is_mostly_same(combined_content, last_content)
                         if should_send:
                             print("✅ Tip found for today:")
                             print(combined_content)
                         else:
-                            print("ℹ️ Tip already sent.")
+                            print("ℹ️ Tip already sent (content is mostly the same).")
                     else:
                         print("❌ No Tip Today")
                 else:
-                    #should_send = last_sent.get(full_url) != combined_content
-                    last_content = last_sent.get(full_url, "")
+                    # Only send if content is significantly different
                     should_send = not last_content or not is_mostly_same(combined_content, last_content)
                     if should_send:
                         print("✅ Content found:")
                         print(combined_content)
                     else:
-                        print("ℹ️ Content already sent.")
+                        print("ℹ️ Content already sent (content is mostly the same).")
 
                 if should_send:
                     send_message(combined_content, url=full_url, lines_to_trim=lines_to_trim)
