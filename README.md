@@ -1,15 +1,16 @@
 # Web Tip Scraper (Playwright + Telegram)
 
-Scrapes predefined pages for daily tips/content, ignores minor edits (e.g., “win/lose” added) via similarity matching, sends Telegram notifications, and logs each tip in JSON and a monthly Excel file.
+Scrapes predefined pages for daily tips/content, ignores minor edits (e.g., “win/lose” added) by comparing the trimmed message it actually sends, delivers Telegram notifications, and logs each tip in JSON and a monthly Excel file.
 
 ## How it works
 
 - Reads targets from `urls.txt` (URL, type, CSS selector, optional date format and line trim).
-- Loads each page with Playwright (headless Chromium), extracts text, and compares with last sent.
-- Sends a Telegram message if content is new/significantly different.
+- Loads each page with Playwright (headless Chromium), extracts text, and builds a combined content.
+- Dedupe: trims to the top N lines (what is sent to Telegram) and compares that against the last sent entry using similarity to avoid notifying on small changes below the fold.
+- Sends a Telegram message if the trimmed content is new/significantly different.
 - Logs:
   - `sent_log.json`: daily run log (auto-cleared daily)
-  - `last_sent.json`: persistent dedupe store
+  - `last_sent.json`: persistent dedupe store (saves the trimmed content)
   - `tips_log_YYYY_MM.xlsx`: monthly Excel log of tips
 
 ## Requirements
@@ -67,7 +68,7 @@ Install system-wide dependencies and browsers with one command:
      - `date` = the site uses a date in the URL (appends DD-MM-YY)
      - `static` = normal URL (or leave anything other than “date”)
    - date_format (optional): one of `dd/mm`, `dd/mm/yy`, `mm/dd` (used to verify today’s tip)
-   - lines_to_trim (optional): integer, how many lines from the top of the extracted text to include in the Telegram message
+   - lines_to_trim (optional): integer, how many lines from the top of the extracted text to include in the Telegram message (also used for dedupe)
    - Examples:
      - `https://example.com/tips/|static|.post-title,.post-body|dd/mm|8`
      - `https://betparade.net/to-over-25-tis-imeras-|date|.entry-content|dd/mm|6`
@@ -86,7 +87,7 @@ Files created/used:
 - `tginfo.txt` (your token and chat ID)
 - `urls.txt` (your targets)
 - `sent_log.json` (auto-cleared daily)
-- `last_sent.json` (persistent dedupe)
+- `last_sent.json` (persistent dedupe; stores the trimmed content)
 - `tips_log_YYYY_MM.xlsx` (monthly Excel log)
 
 ## Optional: Run automatically on startup (systemd)
@@ -171,7 +172,12 @@ tail -f run.log
 
 Update code (examples):
 
-- If using git: `git pull`
+- If using git: `git pull` then `git push`
+- If you get “Updates were rejected… fetch first”:
+  ```bash
+  git pull --rebase
+  git push
+  ```
 - If copying via scp: `scp -r . YOURUSER@YOURSERVER:~/myweb_scraper/`
 - After updates (systemd): `sudo systemctl restart myweb_scraper`
 
@@ -187,11 +193,11 @@ python -c "from playwright.sync_api import sync_playwright as sp; print('OK')"
 
 ## Project structure (key files)
 
-- `main.py` — scraping and dedupe logic (ignores minor text changes)
+- `main.py` — scraping and dedupe logic (compares the trimmed message to ignore minor changes)
 - `notify.py` — Telegram sender and Excel logging
 - `urls.txt` — targets and selectors (you edit this)
 - `tginfo.txt` — bot token and chat ID (two lines)
-- `last_sent.json` — persistent last content per URL
+- `last_sent.json` — persistent last trimmed content per URL
 - `sent_log.json` — daily run log
 - `tips_log_YYYY_MM.xlsx` — monthly tip logs
 

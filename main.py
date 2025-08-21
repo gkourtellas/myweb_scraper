@@ -6,13 +6,8 @@ from datetime import datetime
 from playwright.sync_api import sync_playwright
 from notify import send_message
 
-#import sys
-
-#sys.stdout = open('output.log', 'a', encoding='utf-8', buffering=1)
-#sys.stderr = open('output.log', 'a', encoding='utf-8', buffering=1)
-
-print("Script started", flush=True)
-print("Script Started")
+#print("Script started", flush=True)
+#print("Script Started")
 # Clears the log file if it's a new day
 def clear_log_daily(log_file):
     if os.path.exists(log_file):
@@ -36,6 +31,12 @@ def save_last_sent(file_name, data):
 def is_mostly_same(a, b, threshold=0.9):
     """Return True if a and b are mostly the same (similarity > threshold)."""
     return difflib.SequenceMatcher(None, a, b).ratio() > threshold
+
+def get_compare_text(text, lines_to_trim):
+    """Normalize and trim text to the part we actually send (top N lines, strip blanks)."""
+    trimmed = "\n".join(text.splitlines()[:lines_to_trim])
+    normalized = "\n".join([line.strip() for line in trimmed.splitlines() if line.strip()])
+    return normalized
 
 def check_sites():
     today_url = datetime.today().strftime("%d-%m-%y")
@@ -106,36 +107,44 @@ def check_sites():
                     except Exception as e:
                         print(f"Selector error for {sel}: {e}")
 
+                # Combine the content from all selectors
                 combined_content = "\n".join(contents)
                 print("🔍 Raw content:", combined_content)
 
+                # Use only the trimmed, normalized message for dedupe
+                compare_text = get_compare_text(combined_content, lines_to_trim)
+
                 should_send = False
-                last_content = last_sent.get(full_url, "")
+                # Backward-compatible: older runs stored full content; trim it before comparing
+                last_content_raw = last_sent.get(full_url, "")
+                last_content = get_compare_text(last_content_raw, lines_to_trim) if last_content_raw else ""
+
                 if date_format:
                     expected_date = date_formats.get(date_format, "")
                     if expected_date in combined_content:
-                        # Only send if content is significantly different
-                        should_send = not last_content or not is_mostly_same(combined_content, last_content)
+                        # Only send if content is significantly different (based on trimmed text)
+                        should_send = not last_content or not is_mostly_same(compare_text, last_content)
                         if should_send:
                             print("✅ Tip found for today:")
-                            print(combined_content)
+                            print(compare_text)
                         else:
                             print("ℹ️ Tip already sent (content is mostly the same).")
                     else:
                         print("❌ No Tip Today")
                 else:
-                    # Only send if content is significantly different
-                    should_send = not last_content or not is_mostly_same(combined_content, last_content)
+                    # Only send if content is significantly different (based on trimmed text)
+                    should_send = not last_content or not is_mostly_same(compare_text, last_content)
                     if should_send:
                         print("✅ Content found:")
-                        print(combined_content)
+                        print(compare_text)
                     else:
                         print("ℹ️ Content already sent (content is mostly the same).")
 
                 if should_send:
+                    # Send full combined content (notify trims again for chat), but store trimmed for dedupe
                     send_message(combined_content, url=full_url, lines_to_trim=lines_to_trim)
-                    last_sent[full_url] = combined_content
-                    sent_log[full_url] = combined_content
+                    last_sent[full_url] = compare_text
+                    sent_log[full_url] = compare_text
 
             except Exception as e:
                 print(f"Error accessing {full_url}: {e}")
