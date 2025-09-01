@@ -67,6 +67,8 @@ def check_sites():
     with open("urls.txt", "r") as f:
         lines = f.read().splitlines()
         for line in lines:
+            if line.startswith("#") or not line.strip():  # Skip commented or empty lines
+                continue
             parts = line.split("|")
             if len(parts) >= 3:
                 url = parts[0].strip()
