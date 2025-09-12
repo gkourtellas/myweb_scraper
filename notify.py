@@ -49,6 +49,9 @@ def log_tip_to_xlsx(xlsx_file, url, tip):
 def send_message(message, url=None, tginfo_path='tginfo.txt', lines_to_trim=10):
     """Send a message to Telegram and log the tip to the monthly Excel file."""
     trimmed_message = "\n".join(message.splitlines()[:lines_to_trim])
+    if not trimmed_message.strip():
+        print("⚠️ Empty message, not sending to Telegram.")
+        return False
     token, chat_id = read_telegram_info(tginfo_path)
     if url:
         site_name = extract_site_name(url)

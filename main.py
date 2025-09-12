@@ -109,6 +109,8 @@ def check_sites():
                     except Exception as e:
                         print(f"Selector error for {sel}: {e}")
 
+                # Filter out empty strings from contents
+                contents = [c for c in contents if c.strip()]
                 # Combine the content from all selectors
                 combined_content = "\n".join(contents)
                 print("🔍 Raw content:", combined_content)
