@@ -1,204 +1,153 @@
 # Web Tip Scraper (Playwright + Telegram)
 
-Scrapes predefined pages for daily tips/content, ignores minor edits (e.g., “win/lose” added) by comparing the trimmed message it actually sends, delivers Telegram notifications, and logs each tip in JSON and a monthly Excel file.
+This project scrapes predefined webpages for daily tips or content, compares new data to previous results, and sends Telegram notifications only when significant changes are detected. It avoids duplicate or trivial notifications and logs all tips in JSON and Excel files.
 
-## How it works
-
-- Reads targets from `urls.txt` (URL, type, CSS selector, optional date format and line trim).
-- Loads each page with Playwright (headless Chromium), extracts text, and builds a combined content.
-- Dedupe: trims to the top N lines (what is sent to Telegram) and compares that against the last sent entry using similarity to avoid notifying on small changes below the fold.
-- Sends a Telegram message if the trimmed content is new/significantly different.
-- Logs:
-  - `sent_log.json`: daily run log (auto-cleared daily)
-  - `last_sent.json`: persistent dedupe store (saves the trimmed content)
-  - `tips_log_YYYY_MM.xlsx`: monthly Excel log of tips
+## Features
+- Scrapes multiple sites using Playwright (headless browser)
+- Customizable targets via `urls.txt` (URL, type, CSS selector, etc.)
+- Deduplication: only notifies for meaningful changes
+- Sends Telegram messages using your bot
+- Logs tips to JSON and monthly Excel files
+- Easy setup and automation (systemd or manual)
 
 ## Requirements
-
-- Linux server with Python 3.8+ and bash
+- Linux server (Python 3.8+ and bash)
 - Internet access
 - Telegram bot token and chat ID
+- Python packages (all listed in `requirements.txt`):
+  - playwright
+  - requests
+  - openpyxl
 
-Python packages:
-
-- playwright
-- requests
-- openpyxl
-
-Install system-wide dependencies and browsers with one command:
-
-- After activating your venv, run: `playwright install --with-deps chromium`
-
-## Installation (Linux)
-
-1. SSH to your server and prepare a folder
-
+## Quick Setup
+1. **Clone or copy the project files**
+2. **Create and activate a virtual environment:**
    ```bash
-   mkdir -p ~/myweb_scraper && cd ~/myweb_scraper
+   python3 -m venv venv
+   source venv/bin/activate
    ```
-
-   - Copy the project files here (git clone or scp)
-
-2. Create a virtual environment
-
+3. **Install dependencies:**
    ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   python -m pip install --upgrade pip
-   ```
-
-3. Install dependencies
-
-   ```bash
-   pip install playwright requests openpyxl
+   pip install -r requirements.txt
    playwright install --with-deps chromium
    ```
+4. **Configure Telegram:**
+   - Create a file `tginfo.txt` with two lines:
+     - Line 1: BOT_TOKEN
+     - Line 2: CHAT_ID
+5. **Configure scraping targets in `urls.txt`:**
+   - Each line: `url|type|css_selector|date_format_or_lines_to_trim|optional_lines_to_trim`
+   - See below for details and examples.
 
-4. Configure Telegram
+## Usage
+- **Manual run:**
+  ```bash
+  source venv/bin/activate
+  python main.py
+  ```
+- The script loops and checks sites every ~100 minutes.
+- All logs and tip history are saved in the project folder.
 
-   - Create a `tginfo.txt` file with two lines:
-     - Line 1: `BOT_TOKEN`
-     - Line 2: `CHAT_ID`
+## File Overview
+- `main.py` — scraping and deduplication logic
+- `notify.py` — Telegram messaging and Excel logging
+- `urls.txt` — list of target sites and selectors
+- `tginfo.txt` — Telegram bot token and chat ID
+- `last_sent.json` — persistent dedupe store
+- `sent_log.json` — daily run log
+- `tips_log_YYYY_MM.xlsx` — monthly Excel log
 
-5. Configure targets in `urls.txt`
-
-   - One entry per line. Format:
-     - `url|type|css_selector|date_format_or_lines_to_trim|optional_lines_to_trim`
-   - type:
-     - `date` = the site uses a date in the URL (appends DD-MM-YY)
-     - `static` = normal URL (or leave anything other than “date”)
-   - date_format (optional): one of `dd/mm`, `dd/mm/yy`, `mm/dd` (used to verify today’s tip)
-   - lines_to_trim (optional): integer, how many lines from the top of the extracted text to include in the Telegram message (also used for dedupe)
-   - Examples:
-     - `https://example.com/tips/|static|.post-title,.post-body|dd/mm|8`
-     - `https://betparade.net/to-over-25-tis-imeras-|date|.entry-content|dd/mm|6`
-
-## Usage (manual run)
-
-```bash
-source .venv/bin/activate
-python main.py
+## urls.txt Format
+Each line defines a target site:
 ```
+url|type|css_selector|date_format_or_lines_to_trim|optional_lines_to_trim
+```
+- **type:**
+  - `date` — appends today's date to the URL
+  - `static` — normal URL
+- **date_format:** (optional)
+  - `dd/mm`, `dd/mm/yy`, `mm/dd` (used to verify today's tip)
+- **lines_to_trim:** (optional)
+  - Integer: how many lines from the top to include in the Telegram message
+- **Examples:**
+  - `https://example.com/tips/|static|.post-title,.post-body|dd/mm|8`
+  - `https://betparade.net/to-over-25-tis-imeras-|date|.entry-content|dd/mm|6`
 
-- The script loops forever and sleeps ~100 minutes between checks.
-
-Files created/used:
-
-- `tginfo.txt` (your token and chat ID)
-- `urls.txt` (your targets)
-- `sent_log.json` (auto-cleared daily)
-- `last_sent.json` (persistent dedupe; stores the trimmed content)
-- `tips_log_YYYY_MM.xlsx` (monthly Excel log)
-
-## Optional: Run automatically on startup (systemd)
-
-1. Create a service file
-
+## Automation (systemd)
+1. **Create a service file:**
    ```bash
    sudo nano /etc/systemd/system/myweb_scraper.service
    ```
+   Paste and adjust paths and username:
+   ```ini
+   [Unit]
+   Description=Web Tip Scraper
+   After=network-online.target
 
-   - Paste and adjust paths and your username:
+   [Service]
+   Type=simple
+   User=YOUR_LINUX_USER
+   WorkingDirectory=/home/YOUR_LINUX_USER/myweb_scraper
+   Environment=PYTHONUNBUFFERED=1
+   ExecStart=/home/YOUR_LINUX_USER/myweb_scraper/venv/bin/python /home/YOUR_LINUX_USER/myweb_scraper/main.py
+   Restart=always
+   RestartSec=10
 
-     ```
-     [Unit]
-     Description=My Web Scraper (Playwright + Telegram)
-     After=network-online.target
-
-     [Service]
-     Type=simple
-     User=YOUR_LINUX_USER
-     WorkingDirectory=/home/YOUR_LINUX_USER/myweb_scraper
-     Environment=PYTHONUNBUFFERED=1
-     ExecStart=/home/YOUR_LINUX_USER/myweb_scraper/.venv/bin/python /home/YOUR_LINUX_USER/myweb_scraper/main.py
-     Restart=always
-     RestartSec=10
-
-     [Install]
-     WantedBy=multi-user.target
-     ```
-
-2. Enable and start
-
+   [Install]
+   WantedBy=multi-user.target
+   ```
+2. **Enable and start:**
    ```bash
    sudo systemctl daemon-reload
    sudo systemctl enable myweb_scraper
    sudo systemctl start myweb_scraper
    sudo systemctl status myweb_scraper
    ```
+   - View logs: `journalctl -u myweb_scraper -f`
 
-   - Logs: `journalctl -u myweb_scraper -f`
-
-## Useful commands
-
-Navigation and basics:
-
-```bash
-cd ~/myweb_scraper
-ls -la
-pwd
-```
-
-Virtual environment:
-
-```bash
-# Create
-python3 -m venv .venv
-
-# Activate
-source .venv/bin/activate
-
-# Deactivate
-deactivate
-
-# Install deps
-pip install playwright requests openpyxl
-
-# Freeze
-pip freeze > requirements.txt
-
-# Install from file
-pip install -r requirements.txt
-```
-
-Run without systemd:
-
-```bash
-source .venv/bin/activate && nohup python main.py > run.log 2>&1 &  echo $! > app.pid
-tail -f run.log
-```
-
-- Stop: `kill "$(cat app.pid)"` or `pkill -f "python main.py"`
-
-Update code (examples):
-
-- If using git: `git pull` then `git push`
-- If you get “Updates were rejected… fetch first”:
+## Troubleshooting & Tips
+- **Virtual environment commands:**
   ```bash
-  git pull --rebase
-  git push
+  python3 -m venv venv
+  source venv/bin/activate
+  deactivate
+  pip install -r requirements.txt
+  pip freeze > requirements.txt
   ```
-- If copying via scp: `scp -r . YOURUSER@YOURSERVER:~/myweb_scraper/`
-- After updates (systemd): `sudo systemctl restart myweb_scraper`
+- **Playwright browser install:**
+  ```bash
+  playwright install --with-deps chromium
+  ```
+- **Test Playwright install:**
+  ```bash
+  python -c "from playwright.sync_api import sync_playwright; print('OK')"
+  ```
+- **Run in background (manual):**
+  ```bash
+  source venv/bin/activate && nohup python main.py > run.log 2>&1 & echo $! > app.pid
+  tail -f run.log
+  kill "$(cat app.pid)"
+  ```
+- **Update code:**
+  - If using git: `git pull` then `git push`
+  - If copying via scp: `scp -r . USER@SERVER:~/myweb_scraper/`
+  - After updates (systemd): `sudo systemctl restart myweb_scraper`
 
-Playwright troubleshooting:
+## Security
+- Keep `tginfo.txt` private. Never commit it to public repos.
 
-```bash
-# Reinstall browsers/deps
-playwright install --with-deps chromium
-
-# Test a quick run
-python -c "from playwright.sync_api import sync_playwright as sp; print('OK')"
+## Project Structure
+```
+main.py
+notify.py
+urls.txt
+tginfo.txt
+last_sent.json
+sent_log.json
+tips_log_YYYY_MM.xlsx
+requirements.txt
+README.md
 ```
 
-## Project structure (key files)
-
-- `main.py` — scraping and dedupe logic (compares the trimmed message to ignore minor changes)
-- `notify.py` — Telegram sender and Excel logging
-- `urls.txt` — targets and selectors (you edit this)
-- `tginfo.txt` — bot token and chat ID (two lines)
-- `last_sent.json` — persistent last trimmed content per URL
-- `sent_log.json` — daily run log
-- `tips_log_YYYY_MM.xlsx` — monthly tip logs
-
-Tip: Keep `tginfo.txt` private and never commit it to public repos.
+---
+For questions or improvements, open an issue or contact the maintainer.
