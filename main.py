@@ -4,6 +4,7 @@ import time
 import difflib
 from datetime import datetime
 from playwright.sync_api import sync_playwright
+
 from notify import send_message
 
 #print("Script started", flush=True)
@@ -83,7 +84,7 @@ def check_sites():
                 sites.append((url, url_type, selector, date_format, lines_to_trim))
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.firefox.launch(headless=True)
         page = browser.new_page()
 
         for url, url_type, selector, date_format, lines_to_trim in sites:

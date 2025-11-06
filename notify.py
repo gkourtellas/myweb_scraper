@@ -16,6 +16,13 @@ def read_telegram_info(tginfo_path='tginfo.txt'):
 # Extracts the site name from a given URL for labeling messages
 def extract_site_name(url):
     """Extract the site name from a URL for labeling."""
+    # Custom handling for specific foxbet URLs
+    if 'foxbet.gr/316026/to-dunato-simeio' in url:
+        return 'foxbet-to_dynato'
+    elif 'foxbet.gr/316014/to-stantar' in url:
+        return 'foxbet-to_stantar'
+
+    # Default behavior for other URLs
     netloc = urlparse(url).netloc
     if netloc.startswith('www.'):
         netloc = netloc[4:]
