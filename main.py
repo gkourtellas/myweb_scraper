@@ -45,16 +45,16 @@ def extract_percentage(text):
     match = re.search(r'\((\d+)%\)', text)
     return int(match.group(1)) if match else 0
 
-def scrape_betclever(page, url, last_sent, sent_log):
+def scrape_betclever(page, url, last_sent, sent_log, unique_key, selector):
     """Special handler for betclever - scrapes all tips, sorts by %, sends only >75%"""
-    print(f"\n🎯 Betclever special handler activated for: {url}")
+    print(f"\n🎯 Betclever special handler activated for: {url} (selector: {selector})")
 
     try:
         page.goto(url, timeout=60000)
-        page.wait_for_selector('body > div.wrapper > main > section.all-games > div > div.singles > div.singles__wrap', timeout=30000)
+        page.wait_for_selector(selector, timeout=30000)
 
         # Get the specific container first, then items within it
-        container = page.query_selector('body > div.wrapper > main > section.all-games > div > div.singles > div.singles__wrap')
+        container = page.query_selector(selector)
         if not container:
             print("❌ Container not found")
             return
@@ -123,15 +123,15 @@ def scrape_betclever(page, url, last_sent, sent_log):
 
             combined_message = "\n".join(message_parts)
 
-            # Check if we already sent this exact set of tips
-            last_content = last_sent.get(url, "")
+            # Check if we already sent this exact set of tips (use unique_key for deduplication)
+            last_content = last_sent.get(unique_key, "")
 
             if not is_mostly_same(combined_message, last_content):
                 print("✅ Sending betclever high confidence tips:")
                 print(combined_message)
                 send_message(combined_message, url=url, lines_to_trim=100)
-                last_sent[url] = combined_message
-                sent_log[url] = combined_message
+                last_sent[unique_key] = combined_message
+                sent_log[unique_key] = combined_message
             else:
                 print("ℹ️ Betclever tips already sent (content is mostly the same).")
         else:
@@ -168,7 +168,7 @@ def check_sites():
     sites = []
     with open("urls.txt", "r") as f:
         lines = f.read().splitlines()
-        for line in lines:
+        for line_num, line in enumerate(lines):
             if line.startswith("#") or not line.strip():  # Skip commented or empty lines
                 continue
             parts = line.split("|")
@@ -182,19 +182,21 @@ def check_sites():
                     else int(parts[3].strip()) if len(parts) > 3 and parts[3].strip().isdigit()
                     else 1
                 )
-                sites.append((url, url_type, selector, date_format, lines_to_trim))
+                # Create unique key combining URL and selector to handle duplicate URLs with different configs
+                unique_key = f"{url}|{selector}"
+                sites.append((url, url_type, selector, date_format, lines_to_trim, unique_key))
 
     with sync_playwright() as p:
         browser = p.firefox.launch(headless=True)
         page = browser.new_page()
 
-        for url, url_type, selector, date_format, lines_to_trim in sites:
+        for url, url_type, selector, date_format, lines_to_trim, unique_key in sites:
             full_url = f"{url}{today_url}/" if url_type == "date" else url
             print(f"\nChecking: {full_url}")
 
-            # Special handling for betclever
-            if 'betclever.com' in full_url:
-                scrape_betclever(page, full_url, last_sent, sent_log)
+            # Special handling for betclever only when using the main tips container
+            if 'betclever.com' in full_url and 'singles__wrap' in selector:
+                scrape_betclever(page, full_url, last_sent, sent_log, unique_key, selector)
                 continue
 
             try:
@@ -228,7 +230,7 @@ def check_sites():
 
                 should_send = False
                 # Backward-compatible: older runs stored full content; trim it before comparing
-                last_content_raw = last_sent.get(full_url, "")
+                last_content_raw = last_sent.get(unique_key, "")
                 last_content = get_compare_text(last_content_raw, lines_to_trim) if last_content_raw else ""
 
                 if date_format:
@@ -255,8 +257,8 @@ def check_sites():
                 if should_send:
                     # Send full combined content (notify trims again for chat), but store trimmed for dedupe
                     send_message(combined_content, url=full_url, lines_to_trim=lines_to_trim)
-                    last_sent[full_url] = compare_text
-                    sent_log[full_url] = compare_text
+                    last_sent[unique_key] = compare_text
+                    sent_log[unique_key] = compare_text
 
             except Exception as e:
                 print(f"Error accessing {full_url}: {e}")
