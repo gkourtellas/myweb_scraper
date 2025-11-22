@@ -21,6 +21,11 @@ def extract_site_name(url):
         return 'foxbet-to_dynato'
     elif 'foxbet.gr/316014/to-stantar' in url:
         return 'foxbet-to_stantar'
+    # Custom handling for nostrabet URLs
+    elif 'nostrabet.com/en/bet-of-the-day' in url:
+        return 'nostra_bet_of_the_day'
+    elif 'nostrabet.com/en/banker-of-the-day' in url:
+        return 'notra_banker_of_the_day'
 
     # Default behavior for other URLs
     netloc = urlparse(url).netloc
