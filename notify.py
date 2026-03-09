@@ -26,6 +26,11 @@ def extract_site_name(url):
         return 'nostra_bet_of_the_day'
     elif 'nostrabet.com/en/banker-of-the-day' in url:
         return 'notra_banker_of_the_day'
+    # Custom handling for kingbet URLs
+    elif 'kingbet.com.cy/to-dynato-simeio-imeras' in url:
+        return 'kingbet-to_dynato'
+    elif 'kingbet.com.cy/favori-imeras' in url:
+        return 'kingbet-to_favori'
 
     # Default behavior for other URLs
     netloc = urlparse(url).netloc
