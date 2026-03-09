@@ -57,10 +57,15 @@ def log_tip_to_xlsx(xlsx_file, url, tip):
     ws.append([date_str, time_str, tipster, tip])
     wb.save(xlsx_file)
 
+# Normalize message text for Telegram: trim each line and drop empty lines.
+def normalize_message_text(message, lines_to_trim):
+    cleaned_lines = [line.strip() for line in message.splitlines() if line.strip()]
+    return "\n".join(cleaned_lines[:lines_to_trim])
+
 # Sends a message to a Telegram chat using the bot API and logs the tip
 def send_message(message, url=None, tginfo_path='tginfo.txt', lines_to_trim=10):
     """Send a message to Telegram and log the tip to the monthly Excel file."""
-    trimmed_message = "\n".join(message.splitlines()[:lines_to_trim])
+    trimmed_message = normalize_message_text(message, lines_to_trim)
     # Only send if the tip content is not empty (excluding site name)
     if not trimmed_message.strip():
         print("⚠️ Empty message, not sending to Telegram.")
