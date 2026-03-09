@@ -1,6 +1,6 @@
 import json
 import os
-import re
+# import re  # Only used for betclever (commented out)
 import time
 import difflib
 from datetime import datetime
@@ -40,105 +40,124 @@ def get_compare_text(text, lines_to_trim):
     normalized = "\n".join([line.strip() for line in trimmed.splitlines() if line.strip()])
     return normalized
 
-def extract_percentage(text):
-    """Extract percentage from text like '(72%)'"""
-    match = re.search(r'\((\d+)%\)', text)
-    return int(match.group(1)) if match else 0
+def format_content(url, contents):
+    """Format scraped content based on site-specific requirements"""
+    if not contents:
+        return ""
 
-def scrape_betclever(page, url, last_sent, sent_log, unique_key, selector):
-    """Special handler for betclever - scrapes all tips, sorts by %, sends only >75%"""
-    print(f"\n🎯 Betclever special handler activated for: {url} (selector: {selector})")
+    # bet-on-arme: join with spaces (single line)
+    if 'bet-on-arme.com' in url:
+        return " ".join(contents)
 
-    try:
-        page.goto(url, timeout=60000)
-        page.wait_for_selector(selector, timeout=30000)
+    # bethome: join with spaces but remove last item (stake amount)
+    elif 'bethome.gr' in url:
+        text_parts = " ".join(contents).split()
+        return " ".join(text_parts[:-1]) if text_parts else ""
 
-        # Get the specific container first, then items within it
-        container = page.query_selector(selector)
-        if not container:
-            print("❌ Container not found")
-            return
+    # Default: join with newlines
+    else:
+        return "\n".join(contents)
 
-        items = container.query_selector_all('.singles__item')
-        print(f"Found {len(items)} tips in betclever container")
+# def extract_percentage(text):
+#     """Extract percentage from text like '(72%)'"""
+#     match = re.search(r'\((\d+)%\)', text)
+#     return int(match.group(1)) if match else 0
 
-        tips = []
-        for item in items:
-            try:
-                # Extract team names
-                names = item.query_selector_all('.singles__item-left-name')
-                team1 = names[0].inner_text().strip() if len(names) > 0 else "?"
-                team2 = names[1].inner_text().strip() if len(names) > 1 else "?"
+# def scrape_betclever(page, url, last_sent, sent_log, unique_key, selector):
+#     """Special handler for betclever - scrapes all tips, sorts by %, sends only >75%"""
+#     print(f"\n[BETCLEVER] Betclever special handler activated for: {url} (selector: {selector})", flush=True)
+#
+#     try:
+#         page.goto(url, timeout=60000)
+#         page.wait_for_selector(selector, timeout=30000)
+#
+#         # Get the specific container first, then items within it
+#         container = page.query_selector(selector)
+#         if not container:
+#             print("[BETCLEVER] Container not found", flush=True)
+#             return
+#
+#         items = container.query_selector_all('.singles__item')
+#         print(f"[BETCLEVER] Found {len(items)} tips in betclever container", flush=True)
+#
+#         tips = []
+#         for item in items:
+#             try:
+#                 # Extract team names
+#                 names = item.query_selector_all('.singles__item-left-name')
+#                 team1 = names[0].inner_text().strip() if len(names) > 0 else "?"
+#                 team2 = names[1].inner_text().strip() if len(names) > 1 else "?"
+#
+#                 # Extract time and league
+#                 time_elem = item.query_selector('.singles__item-right-time')
+#                 time_text = time_elem.inner_text().strip() if time_elem else "?"
+#
+#                 league_elem = item.query_selector('.singles__item-right-liga')
+#                 league = league_elem.inner_text().strip() if league_elem else "?"
+#
+#                 # Extract tip and percentage
+#                 tip_elem = item.query_selector('.singles__item-right-winner b')
+#                 tip_text = tip_elem.inner_text().strip() if tip_elem else "?"
+#
+#                 # Extract odds
+#                 odds_elem = item.query_selector('.singles__item-right-odd button')
+#                 odds = odds_elem.inner_text().strip() if odds_elem else "?"
+#
+#                 # Get percentage
+#                 percentage = extract_percentage(tip_text)
+#
+#                 tips.append({
+#                     'team1': team1,
+#                     'team2': team2,
+#                     'time': time_text,
+#                     'league': league,
+#                     'tip': tip_text,
+#                     'odds': odds,
+#                     'percentage': percentage
+#                 })
+#             except Exception as e:
+#                 print(f"Error parsing betclever item: {e}")
+#
+#         # Sort by percentage (highest first)
+#         tips.sort(key=lambda x: x['percentage'], reverse=True)
+#
+#         # Filter for >75%
+#         high_confidence = [t for t in tips if t['percentage'] > 75]
+#
+#         print(f"High confidence tips (>75%): {len(high_confidence)}")
+#
+#         if high_confidence:
+#             # Format all tips into a single message
+#             message_parts = [f"🎯 BETCLEVER HIGH CONFIDENCE TIPS ({len(high_confidence)} tips >75%)\n"]
+#
+#             for tip in high_confidence:
+#                 tip_msg = (
+#                     f"⚽ {tip['team1']} vs {tip['team2']}\n"
+#                     f"⏰ {tip['time']} | {tip['league']}\n"
+#                     f"💡 {tip['tip']}\n"
+#                     f"📊 Odds: {tip['odds']}\n"
+#                 )
+#                 message_parts.append(tip_msg)
+#
+#             combined_message = "\n".join(message_parts)
+#
+#             # Check if we already sent this exact set of tips (use unique_key for deduplication)
+#             last_content = last_sent.get(unique_key, "")
+#
+#             if not is_mostly_same(combined_message, last_content):
+#                 print("✅ Sending betclever high confidence tips:")
+#                 print(combined_message)
+#                 send_message(combined_message, url=url, lines_to_trim=100)
+#                 last_sent[unique_key] = combined_message
+#                 sent_log[unique_key] = combined_message
+#             else:
+#                 print("ℹ️ Betclever tips already sent (content is mostly the same).")
+#         else:
+#             print("❌ No betclever tips above 75% confidence found.")
+#
+#     except Exception as e:
+#         print(f"Error scraping betclever: {e}")
 
-                # Extract time and league
-                time_elem = item.query_selector('.singles__item-right-time')
-                time_text = time_elem.inner_text().strip() if time_elem else "?"
-
-                league_elem = item.query_selector('.singles__item-right-liga')
-                league = league_elem.inner_text().strip() if league_elem else "?"
-
-                # Extract tip and percentage
-                tip_elem = item.query_selector('.singles__item-right-winner b')
-                tip_text = tip_elem.inner_text().strip() if tip_elem else "?"
-
-                # Extract odds
-                odds_elem = item.query_selector('.singles__item-right-odd button')
-                odds = odds_elem.inner_text().strip() if odds_elem else "?"
-
-                # Get percentage
-                percentage = extract_percentage(tip_text)
-
-                tips.append({
-                    'team1': team1,
-                    'team2': team2,
-                    'time': time_text,
-                    'league': league,
-                    'tip': tip_text,
-                    'odds': odds,
-                    'percentage': percentage
-                })
-            except Exception as e:
-                print(f"Error parsing betclever item: {e}")
-
-        # Sort by percentage (highest first)
-        tips.sort(key=lambda x: x['percentage'], reverse=True)
-
-        # Filter for >75%
-        high_confidence = [t for t in tips if t['percentage'] > 75]
-
-        print(f"High confidence tips (>75%): {len(high_confidence)}")
-
-        if high_confidence:
-            # Format all tips into a single message
-            message_parts = [f"🎯 BETCLEVER HIGH CONFIDENCE TIPS ({len(high_confidence)} tips >75%)\n"]
-
-            for tip in high_confidence:
-                tip_msg = (
-                    f"⚽ {tip['team1']} vs {tip['team2']}\n"
-                    f"⏰ {tip['time']} | {tip['league']}\n"
-                    f"💡 {tip['tip']}\n"
-                    f"📊 Odds: {tip['odds']}\n"
-                )
-                message_parts.append(tip_msg)
-
-            combined_message = "\n".join(message_parts)
-
-            # Check if we already sent this exact set of tips (use unique_key for deduplication)
-            last_content = last_sent.get(unique_key, "")
-
-            if not is_mostly_same(combined_message, last_content):
-                print("✅ Sending betclever high confidence tips:")
-                print(combined_message)
-                send_message(combined_message, url=url, lines_to_trim=100)
-                last_sent[unique_key] = combined_message
-                sent_log[unique_key] = combined_message
-            else:
-                print("ℹ️ Betclever tips already sent (content is mostly the same).")
-        else:
-            print("❌ No betclever tips above 75% confidence found.")
-
-    except Exception as e:
-        print(f"Error scraping betclever: {e}")
 
 def check_sites():
     today_url = datetime.today().strftime("%d-%m-%y")
@@ -194,10 +213,10 @@ def check_sites():
             full_url = f"{url}{today_url}/" if url_type == "date" else url
             print(f"\nChecking: {full_url}")
 
-            # Special handling for betclever only when using the main tips container
-            if 'betclever.com' in full_url and 'singles__wrap' in selector:
-                scrape_betclever(page, full_url, last_sent, sent_log, unique_key, selector)
-                continue
+            # # Special handling for betclever only when using the main tips container
+            # if 'betclever.com' in full_url and 'singles__wrap' in selector:
+            #     scrape_betclever(page, full_url, last_sent, sent_log, unique_key, selector)
+            #     continue
 
             try:
                 page.goto(full_url, timeout=60000)
@@ -221,12 +240,17 @@ def check_sites():
 
                 # Filter out empty strings from contents
                 contents = [c for c in contents if c.strip()]
-                # Combine the content from all selectors
-                combined_content = "\n".join(contents)
+
+                # Format content based on site requirements
+                combined_content = format_content(full_url, contents)
                 print("🔍 Raw content:", combined_content)
 
                 # Use only the trimmed, normalized message for dedupe
-                compare_text = get_compare_text(combined_content, lines_to_trim)
+                if 'bet-on-arme.com' in full_url:
+                    # For bet-on-arme, don't add newlines back - keep as single line
+                    compare_text = combined_content
+                else:
+                    compare_text = get_compare_text(combined_content, lines_to_trim)
 
                 should_send = False
                 # Backward-compatible: older runs stored full content; trim it before comparing
@@ -274,3 +298,4 @@ if __name__ == "__main__":
         check_sites()
         print("Sleeping for 100 minutes...")
         time.sleep(6000)  # 6000 seconds = 100 minutes
+
