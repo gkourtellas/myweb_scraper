@@ -293,9 +293,10 @@ def check_sites():
         json.dump(sent_log, f, indent=2)
     save_last_sent(last_sent_file, last_sent)
 
+def main():
+    # Entry point for the script
+    pass
+
 if __name__ == "__main__":
-    while True:
-        check_sites()
-        print("Sleeping for 100 minutes...")
-        time.sleep(6000)  # 6000 seconds = 100 minutes
+    main()
 

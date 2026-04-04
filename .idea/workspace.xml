@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9379be3d-2be2-4d63-aa83-2dde3f2c1119" name="Changes" comment=" feat: add betmarket tip source and update scraping trim settings">
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/myweb_scraper.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/myweb_scraper.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/betclever_test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/last_sent.json" beforeDir="false" afterPath="$PROJECT_DIR$/last_sent.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notify.py" beforeDir="false" afterPath="$PROJECT_DIR$/notify.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scp_transfer.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sent_log.json" beforeDir="false" afterPath="$PROJECT_DIR$/sent_log.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_new_urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_new_urls_selenium.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/urls.txt" beforeDir="false" afterPath="$PROJECT_DIR$/urls.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/urls_test.txt" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_C:/Users/George/PycharmProjects/myweb_scraper" value="350Kq8fjm2Z5GHZZqtITV8pHK0B" />
+    </persistenceIdMap>
+  </component>
+  <component name="CopilotUserSelectedModel">
+    <selectedModels>
+      <entry key="edit-panel" value="Auto" />
+    </selectedModels>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;gkourtellas&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/gkourtellas/myweb_scraper.git&quot;,
+    &quot;accountId&quot;: &quot;24814fe3-b5ce-4b5a-84da-081f5bdd3cdd&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="350Kq8fjm2Z5GHZZqtITV8pHK0B" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.clear_sent_log.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main_test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.restore_tginfo.executor&quot;: &quot;Run&quot;,
+    &quot;Python.use_tginfo_prod.executor&quot;: &quot;Run&quot;,
+    &quot;Python.use_tginfo_test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/George/PycharmProjects/myweb_scraper&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="clear_sent_log" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="myweb_scraper" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/clear_sent_log.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="myweb_scraper" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="restore_tginfo" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="myweb_scraper" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/restore_tginfo.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="use_tginfo_prod" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="myweb_scraper" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/use_tginfo_prod.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="use_tginfo_test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="myweb_scraper" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/use_tginfo_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.clear_sent_log" />
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.use_tginfo_test" />
+        <item itemvalue="Python.use_tginfo_prod" />
+        <item itemvalue="Python.restore_tginfo" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-07523f343e4f-968fe969f28a-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.28539.27" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9379be3d-2be2-4d63-aa83-2dde3f2c1119" name="Changes" comment="" />
+      <created>1762241737016</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1762241737016</updated>
+      <workItem from="1762241738251" duration="6788000" />
+      <workItem from="1762414542193" duration="12611000" />
+      <workItem from="1762589417766" duration="5013000" />
+      <workItem from="1763655253584" duration="8000" />
+    </task>
+    <task id="LOCAL-00001" summary="Add custom foxbet notification labels (dynato/stantar)">
+      <option name="closed" value="true" />
+      <created>1762414842098</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1762414842098</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Fix duplicate URL handling with unique selectors&#10;&#10;- Add unique_key (url+selector) to track duplicate URLs with different configs separately&#10;- Update scrape_betclever to accept selector parameter for dynamic container selection&#10;- Only trigger betclever special handler for singles__wrap selector&#10;- Use unique_key instead of URL for deduplication in logs&#10;- Allows multiple betclever entries with different selectors to process independently">
+      <option name="closed" value="true" />
+      <created>1762590970304</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1762590970304</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Fix duplicate URL handling with unique selectors&#10;&#10;- Add unique_key (url+selector) to track duplicate URLs with different configs separately&#10;- Update scrape_betclever to accept selector parameter for dynamic container selection&#10;- Only trigger betclever special handler for singles__wrap selector&#10;- Use unique_key instead of URL for deduplication in logs&#10;- Allows multiple betclever entries with different selectors to process independently">
+      <option name="closed" value="true" />
+      <created>1762590997984</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1762590997984</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Fix nostrabet URLs format and add custom message prefixes; generalize test files for reusability">
+      <option name="closed" value="true" />
+      <created>1763798617448</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1763798617448</updated>
+    </task>
+    <task id="LOCAL-00005" summary="added bethome">
+      <option name="closed" value="true" />
+      <created>1772800278384</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1772800278384</updated>
+    </task>
+    <task id="LOCAL-00006" summary="added websites">
+      <option name="closed" value="true" />
+      <created>1772876284343</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1772876284343</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Fix tip extraction and message formatting for Sentragoal and Bet-on-arme&#10;&#10;- Replace Sentragoal dynamic ID selectors with stable attribute-based selectors&#10;- Increase Sentragoal lines_to_trim to include full tip details&#10;- Normalize Telegram message text (trim whitespace and remove empty lines)&#10;- Remove bet-on-arme result column from">
+      <option name="closed" value="true" />
+      <created>1773045341562</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1773045341562</updated>
+    </task>
+    <task id="LOCAL-00008" summary="added betarades">
+      <option name="closed" value="true" />
+      <created>1773046253200</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1773046253200</updated>
+    </task>
+    <task id="LOCAL-00009" summary="refactor: Extract site-specific formatting to helper function and comment out betclever&#10;&#10;- Added format_content() helper function to handle site-specific content formatting&#10;- Moved bet-on-arme and bethome.gr formatting logic to centralized function&#10;- Commented out betclever scraping code (not currently in use)&#10;- Updated bethome.gr selector to target active tips instead of past results&#10;- Removed unused 're' import (was only needed for betclever)">
+      <option name="closed" value="true" />
+      <created>1773051846491</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1773051846491</updated>
+    </task>
+    <task id="LOCAL-00010" summary="feat: add separate kingbet labels for dynato/favori and add favori URL">
+      <option name="closed" value="true" />
+      <created>1773057746027</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1773057746027</updated>
+    </task>
+    <task id="LOCAL-00011" summary=" feat: add betmarket tip source and update scraping trim settings">
+      <option name="closed" value="true" />
+      <created>1773058353031</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1773058353031</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Add custom foxbet notification labels (dynato/stantar)" />
+    <MESSAGE value="Fix duplicate URL handling with unique selectors&#10;&#10;- Add unique_key (url+selector) to track duplicate URLs with different configs separately&#10;- Update scrape_betclever to accept selector parameter for dynamic container selection&#10;- Only trigger betclever special handler for singles__wrap selector&#10;- Use unique_key instead of URL for deduplication in logs&#10;- Allows multiple betclever entries with different selectors to process independently" />
+    <MESSAGE value="Fix nostrabet URLs format and add custom message prefixes; generalize test files for reusability" />
+    <MESSAGE value="added bethome" />
+    <MESSAGE value="added websites" />
+    <MESSAGE value="Fix tip extraction and message formatting for Sentragoal and Bet-on-arme&#10;&#10;- Replace Sentragoal dynamic ID selectors with stable attribute-based selectors&#10;- Increase Sentragoal lines_to_trim to include full tip details&#10;- Normalize Telegram message text (trim whitespace and remove empty lines)&#10;- Remove bet-on-arme result column from" />
+    <MESSAGE value="added betarades" />
+    <MESSAGE value="refactor: Extract site-specific formatting to helper function and comment out betclever&#10;&#10;- Added format_content() helper function to handle site-specific content formatting&#10;- Moved bet-on-arme and bethome.gr formatting logic to centralized function&#10;- Commented out betclever scraping code (not currently in use)&#10;- Updated bethome.gr selector to target active tips instead of past results&#10;- Removed unused 're' import (was only needed for betclever)" />
+    <MESSAGE value="feat: add separate kingbet labels for dynato/favori and add favori URL" />
+    <MESSAGE value=" feat: add betmarket tip source and update scraping trim settings" />
+    <option name="LAST_COMMIT_MESSAGE" value=" feat: add betmarket tip source and update scraping trim settings" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/myweb_scraper$restore_tginfo.coverage" NAME="restore_tginfo Coverage Results" MODIFIED="1762416525634" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/myweb_scraper$use_tginfo_test.coverage" NAME="use_tginfo_test Coverage Results" MODIFIED="1762589516579" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/myweb_scraper$main_test.coverage" NAME="main_test Coverage Results" MODIFIED="1762415692377" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/myweb_scraper$main.coverage" NAME="main Coverage Results" MODIFIED="1762590729117" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/myweb_scraper$clear_sent_log.coverage" NAME="clear_sent_log Coverage Results" MODIFIED="1762590724267" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>

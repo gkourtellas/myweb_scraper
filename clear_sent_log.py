@@ -2,10 +2,15 @@ import json
 
 log_files = ['sent_log.json', 'last_sent.json']
 
-for log_file in log_files:
-    with open(log_file, 'w') as f:
-        json.dump({}, f, indent=2)
-    print(f"{log_file} has been cleared.")
+def main():
+    # Entry point for clearing logs
+    for log_file in log_files:
+        with open(log_file, 'w') as f:
+            json.dump({}, f, indent=2)
+        print(f"{log_file} has been cleared.")
+
+if __name__ == "__main__":
+    main()
 
 with open('urls.txt', 'r', encoding='utf-8') as f:
     for line in f:

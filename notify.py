@@ -31,6 +31,8 @@ def extract_site_name(url):
         return 'kingbet-to_dynato'
     elif 'kingbet.com.cy/favori-imeras' in url:
         return 'kingbet-to_favori'
+    elif 'kingbet.com.cy/to-stantar-tis-imeras' in url:
+        return 'kingbet-to_stantar'
 
     # Default behavior for other URLs
     netloc = urlparse(url).netloc
@@ -90,3 +92,10 @@ def send_message(message, url=None, tginfo_path='tginfo.txt', lines_to_trim=10):
     if url:
         log_tip_to_xlsx(get_monthly_log_file(), url, trimmed_message)
     return response.ok
+
+def main():
+    # Entry point for notification handling
+    pass
+
+if __name__ == "__main__":
+    main()

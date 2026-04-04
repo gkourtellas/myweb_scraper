@@ -6,6 +6,13 @@ main_file = 'tginfo.txt'
 prod_file = 'tginfo_prod.txt'
 backup_file = 'tginfo.txt.bak'
 
+def main():
+    # Entry point for switching to production tginfo
+    pass
+
+if __name__ == "__main__":
+    main()
+
 # Backup the original and replace with production
 if os.path.exists(main_file):
     shutil.copy2(main_file, backup_file)

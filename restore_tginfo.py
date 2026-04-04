@@ -5,6 +5,13 @@ import shutil
 main_file = 'tginfo.txt'
 backup_file = 'tginfo.txt.bak'
 
+def main():
+    # Entry point for restoring tginfo
+    pass
+
+if __name__ == "__main__":
+    main()
+
 # Restore the backup
 if os.path.exists(backup_file):
     shutil.copy2(backup_file, main_file)
