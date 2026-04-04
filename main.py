@@ -210,6 +210,18 @@ def check_sites():
         page = browser.new_page()
 
         for url, url_type, selector, date_format, lines_to_trim, unique_key in sites:
+            if 'kingbet.com.cy' in url:
+                try:
+                    page.goto(url, timeout=60000)
+                    # Dynamically select today's date
+                    today_date = datetime.today().strftime("%d.%m.%y")
+                    date_button_selector = f"button:has-text('{today_date}')"
+                    page.wait_for_selector(date_button_selector, timeout=10000)
+                    page.click(date_button_selector)
+                    print(f"Selected today's date: {today_date} on {url}")
+                except Exception as e:
+                    print(f"Error selecting today's date on {url}: {e}")
+
             full_url = f"{url}{today_url}/" if url_type == "date" else url
             print(f"\nChecking: {full_url}")
 
