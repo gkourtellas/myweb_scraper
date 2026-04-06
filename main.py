@@ -307,7 +307,8 @@ def check_sites():
 
 def main():
     # Entry point for the script
-    pass
+    print("Starting bot...", flush=True)
+    check_sites()
 
 if __name__ == "__main__":
     main()
