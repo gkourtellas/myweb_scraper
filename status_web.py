@@ -423,7 +423,7 @@ INDEX_HTML = r"""<!DOCTYPE html>
 """
 
 
-def run(port=8000):
+def run(port=8001):
     server_address = ("0.0.0.0", port)
     try:
         httpd = ThreadingHTTPServer(server_address, StatusHandler)

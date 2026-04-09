@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.idea/
+venv/
+tginfo.txt
+bookmarks.json
+sent_log.json
+last_sent.json
+output.log
+nohup.out
+*.xlsx
+.env

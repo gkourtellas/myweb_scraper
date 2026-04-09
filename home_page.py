@@ -3,12 +3,20 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 from datetime import timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-BOOKMARKS_FILE = os.path.join(BASE_DIR, 'bookmarks.json')
+# Prefer system runtime directory; fallback to repo if not writable
+RUNTIME_DIR = '/var/lib/myweb_scraper'
+try:
+  if not os.path.isdir(RUNTIME_DIR):
+    os.makedirs(RUNTIME_DIR, exist_ok=True)
+except Exception:
+  RUNTIME_DIR = BASE_DIR
+BOOKMARKS_FILE = os.path.join(RUNTIME_DIR, 'bookmarks.json')
 
 HOME_HTML = r"""<!DOCTYPE html>
 <html lang="en">
@@ -325,12 +333,29 @@ def load_bookmarks():
 
 
 def save_bookmarks(bookmarks):
+  try:
+    dirpath = os.path.dirname(BOOKMARKS_FILE) or BASE_DIR
+    os.makedirs(dirpath, exist_ok=True)
+    fd, tmp_path = tempfile.mkstemp(dir=dirpath)
     try:
-        with open(BOOKMARKS_FILE, 'w', encoding='utf-8') as f:
-            json.dump(bookmarks, f, indent=2, ensure_ascii=False)
-        return True
-    except Exception:
-        return False
+      with os.fdopen(fd, 'w', encoding='utf-8') as tmpf:
+        json.dump(bookmarks, tmpf, indent=2, ensure_ascii=False)
+      # atomic replace
+      os.replace(tmp_path, BOOKMARKS_FILE)
+      try:
+        os.chmod(BOOKMARKS_FILE, 0o600)
+      except Exception:
+        pass
+      return True
+    finally:
+      # ensure no stray temp file remains
+      try:
+        if os.path.exists(tmp_path) and not os.path.exists(BOOKMARKS_FILE):
+          os.remove(tmp_path)
+      except Exception:
+        pass
+  except Exception:
+    return False
 
 
 def perform_action(action, server=None):
