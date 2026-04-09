@@ -59,6 +59,10 @@ Then re-enable services if needed:
 - Find port usage: `sudo ss -tulpn | grep -E '6969|8001'`
 - Check service names on systemd: `systemctl list-units --type=service | grep -E 'home_page|status_web|myweb_scraper'`
 
+**Bookmarks storage**
+
+- Bookmarks are now stored server-side in `/var/lib/myweb_scraper/bookmarks.json` (fallback to repo directory when `/var/lib` is unavailable). Do not commit this file.
+
 ## 7. Telegram bot connectivity test
 
 Use this script to validate the Telegram token/chat config:
