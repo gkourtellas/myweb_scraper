@@ -7,6 +7,9 @@ from datetime import timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BOOKMARKS_FILE = os.path.join(BASE_DIR, 'bookmarks.json')
+
 HOME_HTML = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,7 +100,6 @@ HOME_HTML = r"""<!DOCTYPE html>
     </section>
   </div>
   <script>
-    const BOOKMARK_KEY = 'george_server_bookmarks';
     let bookmarks = [];
 
     function renderBookmarks() {
@@ -140,45 +142,57 @@ HOME_HTML = r"""<!DOCTYPE html>
       });
     }
 
-    function loadBookmarks() {
+    async function loadBookmarks() {
       try {
-        const raw = localStorage.getItem(BOOKMARK_KEY);
-        bookmarks = raw ? JSON.parse(raw) : [];
+        const res = await fetch('/api/bookmarks');
+        if (res.ok) {
+          bookmarks = await res.json();
+        } else {
+          bookmarks = [];
+        }
       } catch (err) {
         bookmarks = [];
       }
       renderBookmarks();
     }
 
-    function saveBookmarks() {
-      localStorage.setItem(BOOKMARK_KEY, JSON.stringify(bookmarks));
+    async function saveBookmarks() {
+      try {
+        await fetch('/api/bookmarks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ bookmarks }),
+        });
+      } catch (err) {
+        console.warn('Bookmark save failed', err);
+      }
     }
 
-    function addBookmark() {
+    async function addBookmark() {
       const url = window.prompt('Bookmark URL', 'http://');
       if (!url || !url.trim()) return;
       const title = window.prompt('Bookmark title', 'New bookmark');
       if (!title || !title.trim()) return;
       bookmarks.push({ title: title.trim(), url: url.trim() });
-      saveBookmarks();
+      await saveBookmarks();
       renderBookmarks();
     }
 
-    function editBookmark(index) {
+    async function editBookmark(index) {
       const bookmark = bookmarks[index];
       const title = window.prompt('Bookmark title', bookmark.title);
       if (!title || !title.trim()) return;
       const url = window.prompt('Bookmark URL', bookmark.url);
       if (!url || !url.trim()) return;
       bookmarks[index] = { title: title.trim(), url: url.trim() };
-      saveBookmarks();
+      await saveBookmarks();
       renderBookmarks();
     }
 
-    function removeBookmark(index) {
+    async function removeBookmark(index) {
       if (!confirm('Remove this bookmark?')) return;
       bookmarks.splice(index, 1);
-      saveBookmarks();
+      await saveBookmarks();
       renderBookmarks();
     }
 
@@ -300,6 +314,25 @@ def get_system_stats():
     }
 
 
+def load_bookmarks():
+    if not os.path.exists(BOOKMARKS_FILE):
+        return []
+    try:
+        with open(BOOKMARKS_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+
+def save_bookmarks(bookmarks):
+    try:
+        with open(BOOKMARKS_FILE, 'w', encoding='utf-8') as f:
+            json.dump(bookmarks, f, indent=2, ensure_ascii=False)
+        return True
+    except Exception:
+        return False
+
+
 def perform_action(action, server=None):
     if action == 'restart_homepage':
         if server is not None:
@@ -340,11 +373,34 @@ class HomeHandler(BaseHTTPRequestHandler):
             self._set_headers(200, 'application/json')
             self.wfile.write(json.dumps(stats).encode('utf-8'))
             return
+        if parsed.path == '/api/bookmarks':
+            bookmarks = load_bookmarks()
+            self._set_headers(200, 'application/json')
+            self.wfile.write(json.dumps(bookmarks).encode('utf-8'))
+            return
         self._set_headers(404, 'application/json')
         self.wfile.write(json.dumps({'error': 'not found'}).encode('utf-8'))
 
     def do_POST(self):
         parsed = urlparse(self.path)
+        if parsed.path == '/api/bookmarks':
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try:
+                payload = json.loads(body)
+                bookmarks = payload.get('bookmarks', [])
+                if not isinstance(bookmarks, list):
+                    raise ValueError('Invalid bookmarks payload')
+                saved = save_bookmarks(bookmarks)
+                if not saved:
+                    raise ValueError('Failed to write bookmarks')
+                self._set_headers(200, 'application/json')
+                self.wfile.write(json.dumps({'success': True, 'bookmarks': bookmarks}).encode('utf-8'))
+                return
+            except Exception as exc:
+                self._set_headers(400, 'application/json')
+                self.wfile.write(json.dumps({'success': False, 'error': str(exc)}).encode('utf-8'))
+                return
         if parsed.path != '/api/action':
             self._set_headers(404, 'application/json')
             self.wfile.write(json.dumps({'error': 'not found'}).encode('utf-8'))
