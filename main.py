@@ -58,6 +58,31 @@ def format_content(url, contents):
     else:
         return "\n".join(contents)
 
+
+def normalize_sendragoal_tip(tip_text):
+    lines = [line.strip() for line in tip_text.splitlines() if line.strip()]
+    if len(lines) >= 6:
+        lines = lines[:6]
+    return "\n".join(lines)
+
+
+def write_sendragoal_json(tip_text):
+    """Write the latest SendraGoal tip to /home/gk/matchbot/sendragoal.json."""
+    if not tip_text or not tip_text.strip():
+        return
+
+    normalized_tip = normalize_sendragoal_tip(tip_text)
+    if not normalized_tip:
+        return
+
+    output_path = "/home/gk/matchbot/sendragoal.json"
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "date": datetime.today().strftime("%Y-%m-%d"),
+            "tip": normalized_tip
+        }, f, ensure_ascii=False, indent=2)
+
 # def extract_percentage(text):
 #     """Extract percentage from text like '(72%)'"""
 #     match = re.search(r'\((\d+)%\)', text)
@@ -263,6 +288,9 @@ def check_sites():
                     compare_text = combined_content
                 else:
                     compare_text = get_compare_text(combined_content, lines_to_trim)
+
+                if any(domain in full_url.lower() for domain in ['sendragoal', 'sentragoal']):
+                    write_sendragoal_json(compare_text)
 
                 should_send = False
                 # Backward-compatible: older runs stored full content; trim it before comparing
