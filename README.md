@@ -109,4 +109,10 @@ Rebuild checklist (one-liner order)
 
 1. Clone → 2. venv & deps → 3. playwright install → 4. runtime dir → 5. tginfo.txt (secure) → 6. install services → 7. start services → 8. test Telegram
 
+Recent updates
+- Added JSON output support for SendraGoal and KingBet tips.
+- Added files written to `/home/gk/matchbot/autobet/tips/`.
+- Added separate outputs for `kingbet_to_dynato.json` and `kingbet_to_favori.json`.
+- Confirmed `myweb_scraper` restart command: `sudo systemctl restart myweb_scraper`.
+
 If you want, I can convert these into a single `bootstrap.sh` that performs safe, reviewable steps.

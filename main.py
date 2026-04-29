@@ -59,29 +59,33 @@ def format_content(url, contents):
         return "\n".join(contents)
 
 
-def normalize_sendragoal_tip(tip_text):
+def normalize_matchbot_tip(tip_text, max_lines=6):
     lines = [line.strip() for line in tip_text.splitlines() if line.strip()]
-    if len(lines) >= 6:
-        lines = lines[:6]
+    if len(lines) >= max_lines:
+        lines = lines[:max_lines]
     return "\n".join(lines)
 
 
-def write_sendragoal_json(tip_text):
-    """Write the latest SendraGoal tip to /home/gk/matchbot/sendragoal.json."""
+def write_matchbot_json(tip_text, file_name, max_lines=6):
     if not tip_text or not tip_text.strip():
         return
 
-    normalized_tip = normalize_sendragoal_tip(tip_text)
+    normalized_tip = normalize_matchbot_tip(tip_text, max_lines)
     if not normalized_tip:
         return
 
-    output_path = "/home/gk/matchbot/sendragoal.json"
+    output_path = f"/home/gk/matchbot/autobet/tips/{file_name}"
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump({
             "date": datetime.today().strftime("%Y-%m-%d"),
             "tip": normalized_tip
         }, f, ensure_ascii=False, indent=2)
+
+
+def write_sendragoal_json(tip_text):
+    """Write the latest SendraGoal tip to /home/gk/matchbot/sendragoal.json."""
+    write_matchbot_json(tip_text, "sendragoal.json")
 
 # def extract_percentage(text):
 #     """Extract percentage from text like '(72%)'"""
@@ -291,6 +295,10 @@ def check_sites():
 
                 if any(domain in full_url.lower() for domain in ['sendragoal', 'sentragoal']):
                     write_sendragoal_json(compare_text)
+                if 'kingbet.com.cy/to-dynato-simeio-imeras' in full_url.lower():
+                    write_matchbot_json(compare_text, 'kingbet_to_dynato.json')
+                if 'kingbet.com.cy/favori-imeras' in full_url.lower():
+                    write_matchbot_json(compare_text, 'kingbet_to_favori.json')
 
                 should_send = False
                 # Backward-compatible: older runs stored full content; trim it before comparing
