@@ -80,6 +80,17 @@ def select_kingbet_today_tab(page, url):
     page.goto(url, timeout=60000)
     page.wait_for_load_state("domcontentloaded")
 
+    def js_click(locator):
+        locator.evaluate(
+            """
+            el => el.dispatchEvent(new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window,
+            }))
+            """
+        )
+
     today = datetime.today().date()
     labels_to_try = {
         today.strftime("%d.%m.%y"),
@@ -90,7 +101,7 @@ def select_kingbet_today_tab(page, url):
     for label in labels_to_try:
         button = page.locator("button", has_text=label)
         if button.count() > 0:
-            button.first.click()
+            js_click(button.first)
             page.wait_for_timeout(500)
             print(f"Selected kingbet date tab: {label} on {url}", flush=True)
             return True
@@ -99,7 +110,7 @@ def select_kingbet_today_tab(page, url):
         for element in page.locator(candidate).all():
             label = element.inner_text().strip()
             if parse_kingbet_date_label(label) == today:
-                element.click()
+                js_click(element)
                 page.wait_for_timeout(500)
                 print(f"Selected kingbet date tab: {label} on {url}", flush=True)
                 return True
@@ -110,12 +121,12 @@ def select_kingbet_today_tab(page, url):
         label = slide.inner_text().strip()
         if parse_kingbet_date_label(label) == today:
             try:
-                slide.click()
+                js_click(slide)
             except Exception:
                 # try clicking the inner date element if slide itself isn't clickable
                 date_elem = slide.locator(".betting-features__calendar__date")
                 if date_elem.count() > 0:
-                    date_elem.first.click()
+                    js_click(date_elem.first)
             page.wait_for_timeout(500)
             print(f"Selected kingbet date tab: {label} on {url}", flush=True)
             return True
