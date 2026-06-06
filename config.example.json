@@ -1,0 +1,10 @@
+{
+  "dry_run": true,
+  "bankroll": 1000.0,
+  "stake": 10.0,
+  "min_back_odds": 1.8,
+  "max_back_odds": 2.4,
+  "max_open_bets": 3,
+  "max_session_loss": 50.0,
+  "max_total_exposure": 100.0
+}

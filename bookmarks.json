@@ -1,0 +1,38 @@
+[
+  {
+    "title": "MatchBook Admin Console",
+    "url": "http://monitor:5051/admin"
+  },
+  {
+    "title": "Web Scraper",
+    "url": "http://monitor:8001/"
+  },
+  {
+    "title": "MetaBase DB",
+    "url": "http://monitor:3000/question#eyJkYXRhc2V0X3F1ZXJ5Ijp7ImRhdGFiYXNlIjoyLCJsaWIvdHlwZSI6Im1icWwvcXVlcnkiLCJzdGFnZXMiOlt7ImxpYi90eXBlIjoibWJxbC5zdGFnZS9tYnFsIiwic291cmNlLXRhYmxlIjo5fV19LCJkaXNwbGF5IjoidGFibGUiLCJ2aXN1YWxpemF0aW9uX3NldHRpbmdzIjp7fX0="
+  },
+  {
+    "title": "PaperLess",
+    "url": "http://monitor:8000/accounts/login/?next=/"
+  },
+  {
+    "title": "CockPit",
+    "url": "https://monitor:9090/"
+  },
+  {
+    "title": "MatchBook API Dashboard",
+    "url": "http://monitor:5050/api/dashboard"
+  },
+  {
+    "title": "Can only be accessed inernally - internal bot metrics",
+    "url": "http://monitor:5060/api/bot_metrics"
+  },
+  {
+    "title": "MatchBook Dashboard",
+    "url": "http://monitor:5050/"
+  },
+  {
+    "title": "N8N",
+    "url": "http://monitor:5678/projects/oWQ2cRKtbTx25tA9/workflows"
+  }
+]

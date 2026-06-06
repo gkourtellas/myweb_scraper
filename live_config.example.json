@@ -1,0 +1,19 @@
+{
+  "bankroll": 1000.0,
+  "stake": 0.1,
+  "min_back_odds": 1.45,
+  "max_back_odds": 1.6,
+  "max_open_bets": 1,
+  "max_total_exposure": 10.0,
+  "max_session_loss": 10.0,
+  "poll_interval_seconds": 60,
+  "event_lookahead_minutes": 180,
+  "min_seconds_to_start": 300,
+  "sport_name": "Football",
+  "market_name": "Match Odds",
+  "odds_type": "DECIMAL",
+  "currency": "EUR",
+  "minimum_liquidity": 2.0,
+  "keep_in_play": false,
+  "staking_plan": [0.1, 0.3, 0.9, 2.7, 8.1, 24.3]
+}

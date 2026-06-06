@@ -1,0 +1,51 @@
+services:
+  scraper:
+    build: .
+    image: myweb-scraper:latest
+    container_name: myweb_scraper
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PYTHONUNBUFFERED: "1"
+      MATCHBOT_OUTPUT_DIR: ${MATCHBOT_OUTPUT_DIR:-/matchbot}
+      SCRAPE_INTERVAL_SECONDS: ${SCRAPE_INTERVAL_SECONDS:-3600}
+      TGINFO_PATH: ${TGINFO_PATH:-/app/tginfo.txt}
+    volumes:
+      - ./:/app
+      - ${MATCHBOT_HOST_DIR:-/home/gk/matchbot}:/matchbot
+    command: ["scraper"]
+
+  status:
+    build: .
+    image: myweb-scraper:latest
+    container_name: myweb_scraper_status
+    restart: unless-stopped
+    depends_on:
+      - scraper
+    ports:
+      - "${STATUS_PORT:-8001}:8001"
+    environment:
+      PYTHONUNBUFFERED: "1"
+      RUNTIME: docker
+      DOCKER_SCRAPER_CONTAINER: myweb_scraper
+      STATUS_PORT: "8001"
+    volumes:
+      - ./:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: ["status"]
+
+  homepage:
+    build: .
+    image: myweb-scraper:latest
+    container_name: myweb_scraper_homepage
+    restart: unless-stopped
+    ports:
+      - "${HOMEPAGE_PORT:-6969}:6969"
+    environment:
+      PYTHONUNBUFFERED: "1"
+      HOMEPAGE_PORT: "6969"
+    volumes:
+      - ./:/app
+      - ./bookmarks.json:/app/bookmarks.json
+    command: ["homepage"]

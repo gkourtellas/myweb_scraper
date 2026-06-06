@@ -1,0 +1,30 @@
+[
+  {
+    "market_id": "MKT-001",
+    "selection": "Team A",
+    "back_odds": 2.1,
+    "lay_odds": 2.14,
+    "result": "win"
+  },
+  {
+    "market_id": "MKT-002",
+    "selection": "Team B",
+    "back_odds": 2.6,
+    "lay_odds": 2.7,
+    "result": "lose"
+  },
+  {
+    "market_id": "MKT-003",
+    "selection": "Team C",
+    "back_odds": 1.95,
+    "lay_odds": 2.0,
+    "result": "lose"
+  },
+  {
+    "market_id": "MKT-004",
+    "selection": "Team D",
+    "back_odds": 2.3,
+    "lay_odds": 2.36,
+    "result": "win"
+  }
+]

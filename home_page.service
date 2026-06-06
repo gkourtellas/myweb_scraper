@@ -1,0 +1,17 @@
+[Unit]
+Description=George's Server Homepage
+After=network.target
+
+[Service]
+Type=simple
+User=gk
+WorkingDirectory=/home/gk/myweb_scraper
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/gk/myweb_scraper/venv/bin/python3 /home/gk/myweb_scraper/home_page.py 6969
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
