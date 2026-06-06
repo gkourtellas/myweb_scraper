@@ -91,16 +91,25 @@ def select_kingbet_today_tab(page, url):
             """
         )
 
-    def wait_for_kingbet_publish_date(expected_date):
+    def wait_for_kingbet_selection(slide_selector, before_text):
         page.wait_for_function(
             """
-            expected => {
-                const listing = document.querySelector('.betting-features__listing[data-args]');
-                return Boolean(listing && listing.getAttribute('data-args') &&
-                    listing.getAttribute('data-args').includes(`"publish_date":"${expected}"`));
+            selector => {
+                const slide = document.querySelector(selector);
+                return Boolean(slide && slide.classList.contains('current'));
             }
             """,
-            arg=expected_date,
+            arg=slide_selector,
+            timeout=10000,
+        )
+        page.wait_for_function(
+            """
+            before => {
+                const listing = document.querySelector('.betting-features__listing');
+                return Boolean(listing && listing.innerText.trim() && listing.innerText.trim() !== before);
+            }
+            """,
+            arg=before_text,
             timeout=10000,
         )
 
@@ -114,8 +123,9 @@ def select_kingbet_today_tab(page, url):
 
     iso_slide = page.locator(f".betting-features__calendar__slide[data-date='{today_iso}']")
     if iso_slide.count() > 0:
+        before_text = page.locator('.betting-features__listing').inner_text().strip()
         js_click(iso_slide.first)
-        wait_for_kingbet_publish_date(today_iso)
+        wait_for_kingbet_selection(f".betting-features__calendar__slide[data-date='{today_iso}']", before_text)
         page.wait_for_timeout(500)
         print(f"Selected kingbet date tab: {today_iso} on {url}", flush=True)
         return True
@@ -123,8 +133,9 @@ def select_kingbet_today_tab(page, url):
     for label in labels_to_try:
         button = page.locator("button", has_text=label)
         if button.count() > 0:
+            before_text = page.locator('.betting-features__listing').inner_text().strip()
             js_click(button.first)
-            wait_for_kingbet_publish_date(today_iso)
+            wait_for_kingbet_selection(".betting-features__calendar__slide.current", before_text)
             page.wait_for_timeout(500)
             print(f"Selected kingbet date tab: {label} on {url}", flush=True)
             return True
@@ -133,8 +144,9 @@ def select_kingbet_today_tab(page, url):
         for element in page.locator(candidate).all():
             label = element.inner_text().strip()
             if parse_kingbet_date_label(label) == today:
+                before_text = page.locator('.betting-features__listing').inner_text().strip()
                 js_click(element)
-                wait_for_kingbet_publish_date(today_iso)
+                wait_for_kingbet_selection(".betting-features__calendar__slide.current", before_text)
                 page.wait_for_timeout(500)
                 print(f"Selected kingbet date tab: {label} on {url}", flush=True)
                 return True
@@ -144,6 +156,7 @@ def select_kingbet_today_tab(page, url):
     for slide in page.locator(".betting-features__calendar__slide").all():
         label = slide.inner_text().strip()
         if parse_kingbet_date_label(label) == today:
+            before_text = page.locator('.betting-features__listing').inner_text().strip()
             try:
                 js_click(slide)
             except Exception:
@@ -151,7 +164,7 @@ def select_kingbet_today_tab(page, url):
                 date_elem = slide.locator(".betting-features__calendar__date")
                 if date_elem.count() > 0:
                     js_click(date_elem.first)
-            wait_for_kingbet_publish_date(today_iso)
+            wait_for_kingbet_selection(f".betting-features__calendar__slide[data-date='{today_iso}']", before_text)
             page.wait_for_timeout(500)
             print(f"Selected kingbet date tab: {label} on {url}", flush=True)
             return True
