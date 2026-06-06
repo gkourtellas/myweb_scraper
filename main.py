@@ -77,7 +77,7 @@ def parse_kingbet_date_label(text):
 
 def select_kingbet_today_tab(page, url):
     """Open kingbet page and select today's date tab if it exists."""
-    page.goto(url, timeout=60000)
+    page.goto(url, timeout=60000, wait_until="domcontentloaded")
     page.wait_for_load_state("domcontentloaded")
 
     def js_click(locator):
