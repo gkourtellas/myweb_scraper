@@ -377,7 +377,8 @@ def check_sites():
                 contents = []
                 for sel in selectors:
                     try:
-                        page.wait_for_selector(sel, timeout=30000)
+                        wait_state = "attached" if is_kingbet else "visible"
+                        page.wait_for_selector(sel, state=wait_state, timeout=30000)
                         element = page.query_selector(sel)
                         if element:
                             if sel.endswith("table"):
