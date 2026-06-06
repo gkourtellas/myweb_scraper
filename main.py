@@ -100,7 +100,7 @@ def select_kingbet_today_tab(page, url):
                     listing.getAttribute('data-args').includes(`"publish_date":"${expected}"`));
             }
             """,
-            expected_date,
+            arg=expected_date,
             timeout=10000,
         )
 
