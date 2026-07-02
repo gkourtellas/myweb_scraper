@@ -1,0 +1,22 @@
+{
+  "https://sportbet.gr/prognostika-to-dynato-simeio-imeras/|#featured_archive > div.featured-item.active > table > tbody > tr:nth-child(1) > td.names.hidden-sm-down,#featured_archive > div.featured-item.active > table > tbody > tr:nth-child(3) > td:nth-child(3),#featured_archive > div.featured-item.active > table > tbody > tr:nth-child(3) > td:nth-child(4)": {
+    "text": "Λιν - Ασάνε\n1\n1.85",
+    "date": "2026-07-01"
+  },
+  "https://www.foxbet.gr/316014/to-stantar-tis-imeras|table.prediction_bet_1_3cols tbody tr:first-child td:nth-child(1),table.prediction_bet_1_3cols tbody tr:first-child td:nth-child(2),table.prediction_bet_1_3cols tbody tr:first-child td:nth-child(3)": {
+    "text": "Ισπανία - Αυστρία\n(22:00)\n1 & Under 3,5\n2.05",
+    "date": "2026-07-02"
+  },
+  "https://www.kingbet.com.cy/favori-imeras/|div.betting-features__listing div.betting-feature.block:first-child .betting-feature__match-name,div.betting-features__listing div.betting-feature.block:first-child .betting-feature__prediction,div.betting-features__listing div.betting-feature.block:first-child .betting-feature__affiliate-link": {
+    "text": "Λιν - Ασάνε\n1\nΑπόδοση: 1.76",
+    "date": "2026-07-02"
+  },
+  "https://www.sentragoal.gr/dunato-simeio-imeras/|div[id^='predictions_'][id$='_page_container'] > table > tbody > tr:nth-child(2) > td.predictions_table__date.text-center.font-0-8.text-nowrap.text-gray-500,div[id^='predictions_'][id$='_page_container'] > table > tbody > tr:nth-child(2) > td.predictions_table__fixture.text-start.font-0-9,div[id^='predictions_'][id$='_page_container'] > table > tbody > tr:nth-child(2) > td.predictions_table__market.text-start.fw-medium.font-0-9,div[id^='predictions_'][id$='_page_container'] > table > tbody > tr:nth-child(2) > td.predictions_table__betting-odd.text-center.text-nowrap": {
+    "text": "02/07\n19:00\nΡουμανία\nΕλλάδα\nΤολιόπουλος Over 13.5 Πόντοι\n1.93",
+    "date": "2026-07-02"
+  },
+  "https://www.bethome.gr/prognostika-to-simeio-tis-imeras/|#main > div.betting-tips.mb-5 > div.betting-tips-listing.betting-tips-listing--rounded.betting-tips-listing--is-active-tip.betting-tips-listing--open > div.betting-tips-listing__table > div:nth-child(2)": {
+    "text": "ΑΓΓΛΙΑ - ΚΟΝΓΚΟ 01/07 19:00 1 & Under 3.5 1.85",
+    "date": "2026-06-30"
+  }
+}

@@ -1,0 +1,13 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.git/
+.aider*
+*.md
+!DOCKER.md
+terminals/
+agent-transcripts/
+tips_log_*.xlsx
+output.log
+nohup.out

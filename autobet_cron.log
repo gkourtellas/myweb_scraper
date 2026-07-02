@@ -1,0 +1,235 @@
+[Mon Jun 22 11:00:01 UTC 2026] Starting translate step...
+2026-06-22 11:00:01,775 INFO Translated unknown team 'Αργεντινή' -> 'Argentina' (consider adding to KNOWN_TEAMS)
+2026-06-22 11:00:02,071 INFO Translated unknown team 'Αυστρία' -> 'Austria' (consider adding to KNOWN_TEAMS)
+2026-06-22 11:00:02,072 INFO Αργεντινή vs Αυστρία -> Argentina vs Austria
+2026-06-22 11:00:02,340 INFO Translated unknown team 'Νορβηγία' -> 'Norway' (consider adding to KNOWN_TEAMS)
+2026-06-22 11:00:02,627 INFO Translated unknown team 'Σενεγάλη' -> 'Senegal' (consider adding to KNOWN_TEAMS)
+2026-06-22 11:00:02,628 INFO Νορβηγία vs Σενεγάλη -> Norway vs Senegal
+2026-06-22 11:00:02,916 INFO Translated unknown team 'Ιορδανία' -> 'Jordan' (consider adding to KNOWN_TEAMS)
+2026-06-22 11:00:03,228 INFO Translated unknown team 'Αλγερία' -> 'Algeria' (consider adding to KNOWN_TEAMS)
+2026-06-22 11:00:03,228 INFO Ιορδανία vs Αλγερία -> Jordan vs Algeria
+2026-06-22 11:00:03,535 INFO Translated unknown team 'ΝΟΡΒΗΓΙΑ' -> 'NORWAY' (consider adding to KNOWN_TEAMS)
+2026-06-22 11:00:03,821 INFO Translated unknown team 'ΣΕΝΕΓΑΛΗ' -> 'SENEGAL' (consider adding to KNOWN_TEAMS)
+2026-06-22 11:00:03,822 INFO ΝΟΡΒΗΓΙΑ vs ΣΕΝΕΓΑΛΗ -> NORWAY vs SENEGAL
+2026-06-22 11:00:04,103 INFO Translated unknown team 'Αργεντινή' -> 'Argentina' (consider adding to KNOWN_TEAMS)
+2026-06-22 11:00:04,404 INFO Translated unknown team 'Αυστρία' -> 'Austria' (consider adding to KNOWN_TEAMS)
+2026-06-22 11:00:04,405 INFO Αργεντινή vs Αυστρία -> Argentina vs Austria
+2026-06-22 11:00:04,405 WARNING Could not find team names in tip: 23/06
+06:00
+Ιορδανία
+Αλγερία
+2
+1.62
+2026-06-22 11:00:05,493 INFO Translated unknown team 'Βάρμπεργκ' -> 'Varberg' (consider adding to KNOWN_TEAMS)
+2026-06-22 11:00:06,199 INFO Translated unknown team 'Λαντσκρόνα' -> 'Landscrona' (consider adding to KNOWN_TEAMS)
+2026-06-22 11:00:06,200 INFO Βάρμπεργκ vs Λαντσκρόνα -> Varberg vs Landscrona
+2026-06-22 11:00:06,200 INFO Wrote translated tips to /app/last_sent.json
+[Mon Jun 22 11:00:06 UTC 2026] Starting bet placement step...
+2026-06-22 11:00:06,744 INFO Logged into Matchbook as nintza13
+2026-06-22 11:00:07,383 INFO Bet placed: Argentina vs Austria, selection=1, odds=1.48, stake=0.1, status=matched
+2026-06-22 11:00:08,489 INFO Bet placed: Norway vs Senegal, selection=1, odds=2.22, stake=0.1, status=matched
+2026-06-22 11:00:08,874 INFO Tip is not a simple 1/2/X bet, sending for manual review: Ιορδανία - Αλγερία
+(23/6, 06:00)
+1.55
+2026-06-22 11:00:09,242 INFO Tip is not a simple 1/2/X bet, sending for manual review: ΝΟΡΒΗΓΙΑ - ΣΕΝΕΓΑΛΗ 23/06 03:00 X2 & Over 1.5 2.25
+2026-06-22 11:00:09,628 INFO Tip is not a simple 1/2/X bet, sending for manual review: Αργεντινή - Αυστρία
+1
+2026-06-22 11:00:09,996 WARNING Tip missing translated team names, skipping: https://www.sentragoal.gr/dunato-simeio-imeras/|div[id^='predictions_'][id$='_page_container'] > table > tbody > tr:nth-child(2) > td.predictions_table__date.text-center.font-0-8.text-nowrap.text-gray-500,div[id^='predictions_'][id$='_page_container'] > table > tbody > tr:nth-child(2) > td.predictions_table__fixture.text-start.font-0-9,div[id^='predictions_'][id$='_page_container'] > table > tbody > tr:nth-child(2) > td.predictions_table__market.text-start.fw-medium.font-0-9,div[id^='predictions_'][id$='_page_container'] > table > tbody > tr:nth-child(2) > td.predictions_table__betting-odd.text-center.text-nowrap
+2026-06-22 11:00:10,355 INFO Tip is not a simple 1/2/X bet, sending for manual review: Βάρμπεργκ - Λαντσκρόνα
+1
+[Mon Jun 22 11:00:10 UTC 2026] Done.
+[Tue Jun 23 11:00:01 UTC 2026] Starting translate step...
+2026-06-23 11:00:02,453 INFO Translated unknown team 'Κουόπιο' -> 'Kuopio' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:03,070 INFO Translated unknown team 'Ίλβες' -> 'Ilves' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:03,071 INFO Κουόπιο vs Ίλβες -> Kuopio vs Ilves
+2026-06-23 11:00:03,367 INFO Translated unknown team 'Παναμάς' -> 'Panama' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:03,669 INFO Translated unknown team 'Κροατία' -> 'Croatian' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:03,670 INFO Παναμάς vs Κροατία -> Panama vs Croatian
+2026-06-23 11:00:03,952 INFO Translated unknown team 'Ιορδανία' -> 'Jordan' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:04,241 INFO Translated unknown team 'Αλγερία' -> 'Algeria' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:04,242 INFO Ιορδανία vs Αλγερία -> Jordan vs Algeria
+2026-06-23 11:00:04,531 INFO Translated unknown team 'ΑΓΓΛΙΑ' -> 'ENGLAND' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:05,290 INFO Translated unknown team 'ΓΚΑΝΑ' -> 'GHANA' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:05,291 INFO ΑΓΓΛΙΑ vs ΓΚΑΝΑ -> ENGLAND vs GHANA
+2026-06-23 11:00:05,575 INFO Translated unknown team 'Αργεντινή' -> 'Argentina' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:05,854 INFO Translated unknown team 'Αυστρία' -> 'Austria' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:05,855 INFO Αργεντινή vs Αυστρία -> Argentina vs Austria
+2026-06-23 11:00:06,203 INFO Translated unknown team 'Παναμάς' -> 'Panama' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:06,471 INFO Translated unknown team 'Κροατία' -> 'Croatian' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:06,472 INFO Παναμάς vs Κροατία -> Panama vs Croatian
+2026-06-23 11:00:06,472 INFO Βάρμπεργκ vs Λαντσκρόνα -> Varbergs Bois vs Landskrona Bois
+2026-06-23 11:00:06,760 INFO Translated unknown team 'Κολομβία' -> 'Colombia' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:07,556 INFO Translated unknown team 'ΛΔ Κονγκό' -> 'DR Congo' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:07,557 INFO Κολομβία vs ΛΔ Κονγκό -> Colombia vs DR Congo
+2026-06-23 11:00:07,557 INFO Βάρμπεργκ vs Λαντσκρόνα -> Varbergs Bois vs Landskrona Bois
+2026-06-23 11:00:07,814 INFO Translated unknown team 'Αργεντινή' -> 'Argentina' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:08,105 INFO Translated unknown team 'Αυστρία' -> 'Austria' (consider adding to KNOWN_TEAMS)
+2026-06-23 11:00:08,106 INFO Αργεντινή vs Αυστρία -> Argentina vs Austria
+2026-06-23 11:00:08,107 INFO Wrote translated tips to /app/last_sent.json
+[Tue Jun 23 11:00:08 UTC 2026] Starting bet placement step...
+2026-06-23 11:00:08,700 INFO Logged into Matchbook as nintza13
+2026-06-23 11:00:09,067 WARNING No Matchbook event found for Kuopio vs Ilves
+2026-06-23 11:00:09,792 WARNING No Matchbook event found for Panama vs Croatian
+2026-06-23 11:00:10,153 INFO Tip is not a simple 1/2/X bet, sending for manual review: Ιορδανία - Αλγερία
+(23/6, 06:00)
+1.55
+2026-06-23 11:00:10,484 INFO Tip is not a simple 1/2/X bet, sending for manual review: ΑΓΓΛΙΑ - ΓΚΑΝΑ 23/06 23:00 1/1 & Over 2.5 2.37
+2026-06-23 11:00:10,834 INFO Tip is not a simple 1/2/X bet, sending for manual review: Αργεντινή - Αυστρία
+1
+2026-06-23 11:00:11,166 INFO Tip is not a simple 1/2/X bet, sending for manual review: 24/06
+02:00
+Παναμάς
+Κροατία
+2 & Οver 1,5
+1.80
+2026-06-23 11:00:11,509 INFO Tip is not a simple 1/2/X bet, sending for manual review: Βάρμπεργκ - Λαντσκρόνα
+1
+2026-06-23 11:00:12,322 WARNING No Matchbook event found for Colombia vs DR Congo
+2026-06-23 11:00:13,042 WARNING No Matchbook event found for Varbergs Bois vs Landskrona Bois
+2026-06-23 11:00:13,750 WARNING No Matchbook event found for Argentina vs Austria
+[Tue Jun 23 11:00:14 UTC 2026] Done.
+[Wed Jun 24 11:00:01 UTC 2026] Starting translate step...
+2026-06-24 11:00:02,343 INFO Translated unknown team 'Βοσνία' -> 'Bosnia' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:02,601 INFO Translated unknown team 'Κατάρ' -> 'Catarrh' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:02,602 INFO Βοσνία vs Κατάρ -> Bosnia vs Catarrh
+2026-06-24 11:00:02,891 INFO Translated unknown team 'Παναμάς' -> 'Panama' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:03,207 INFO Translated unknown team 'Κροατία' -> 'Croatian' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:03,208 INFO Παναμάς vs Κροατία -> Panama vs Croatian
+2026-06-24 11:00:03,503 INFO Translated unknown team 'Ιορδανία' -> 'Jordan' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:03,789 INFO Translated unknown team 'Αλγερία' -> 'Algeria' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:03,790 INFO Ιορδανία vs Αλγερία -> Jordan vs Algeria
+2026-06-24 11:00:04,065 INFO Translated unknown team 'ΝΟΤΙΑ ΑΦΡΙΚΗ' -> 'SOUTH AFRICA' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:04,590 INFO Translated unknown team 'ΝΟΤΙΑ ΚΟΡΕΑ' -> 'SOUTH KOREA' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:04,592 INFO ΝΟΤΙΑ ΑΦΡΙΚΗ vs ΝΟΤΙΑ ΚΟΡΕΑ -> SOUTH AFRICA vs SOUTH KOREA
+2026-06-24 11:00:04,873 INFO Translated unknown team 'Αργεντινή' -> 'Argentina' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:05,154 INFO Translated unknown team 'Αυστρία' -> 'Austria' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:05,155 INFO Αργεντινή vs Αυστρία -> Argentina vs Austria
+2026-06-24 11:00:05,482 INFO Translated unknown team 'Ελβετία' -> 'Switzerland' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:05,754 INFO Translated unknown team 'Καναδάς' -> 'Canada' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:05,755 INFO Ελβετία vs Καναδάς -> Switzerland vs Canada
+2026-06-24 11:00:05,755 INFO Βάρμπεργκ vs Λαντσκρόνα -> Varbergs Bois vs Landskrona Bois
+2026-06-24 11:00:06,674 INFO Translated unknown team 'Ν. Αφρική' -> 'S. Africa' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:07,143 INFO Translated unknown team 'Νότια Κορέα' -> 'South Korea' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:07,144 INFO Ν. Αφρική vs Νότια Κορέα -> S. Africa vs South Korea
+2026-06-24 11:00:07,145 INFO Βάρμπεργκ vs Λαντσκρόνα -> Varbergs Bois vs Landskrona Bois
+2026-06-24 11:00:07,474 INFO Translated unknown team 'Νότια Αφρική' -> 'South Africa' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:07,761 INFO Translated unknown team 'Νότια Κορέα' -> 'South Korea' (consider adding to KNOWN_TEAMS)
+2026-06-24 11:00:07,762 INFO Νότια Αφρική vs Νότια Κορέα -> South Africa vs South Korea
+2026-06-24 11:00:07,763 INFO Wrote translated tips to /app/last_sent.json
+[Wed Jun 24 11:00:07 UTC 2026] Starting bet placement step...
+2026-06-24 11:00:08,357 INFO Logged into Matchbook as nintza13
+2026-06-24 11:00:08,724 WARNING No Matchbook event found for Bosnia vs Catarrh
+2026-06-24 11:00:09,481 WARNING No Matchbook event found for Panama vs Croatian
+2026-06-24 11:00:09,806 INFO Tip is not a simple 1/2/X bet, sending for manual review: Ιορδανία - Αλγερία
+(23/6, 06:00)
+1.55
+2026-06-24 11:00:10,206 INFO Tip is not a simple 1/2/X bet, sending for manual review: ΝΟΤΙΑ ΑΦΡΙΚΗ - ΝΟΤΙΑ ΚΟΡΕΑ 25/06 04:00 2 & Under 4.5 1.98
+2026-06-24 11:00:10,577 INFO Tip is not a simple 1/2/X bet, sending for manual review: Αργεντινή - Αυστρία
+1
+2026-06-24 11:00:10,921 INFO Tip is not a simple 1/2/X bet, sending for manual review: 24/06
+22:00
+Ελβετία
+Καναδάς
+Χ
+3.00
+2026-06-24 11:00:11,295 INFO Tip is not a simple 1/2/X bet, sending for manual review: Βάρμπεργκ - Λαντσκρόνα
+1
+2026-06-24 11:00:12,088 WARNING No Matchbook event found for S. Africa vs South Korea
+2026-06-24 11:00:12,544 WARNING No Matchbook event found for Varbergs Bois vs Landskrona Bois
+2026-06-24 11:00:13,567 INFO Bet placed: South Africa vs South Korea, selection=2, odds=1.67, stake=0.1, status=matched
+[Wed Jun 24 11:00:13 UTC 2026] Done.
+[Thu Jun 25 11:00:01 UTC 2026] Starting translate step...
+2026-06-25 11:00:01,998 INFO Translated unknown team 'Γκρομπίνα' -> 'Grobina' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:02,577 INFO Translated unknown team 'Αούντα' -> 'Auda' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:02,578 INFO Γκρομπίνα vs Αούντα -> Grobina vs Auda
+2026-06-25 11:00:02,865 INFO Translated unknown team 'Παναμάς' -> 'Panama' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:03,133 INFO Translated unknown team 'Κροατία' -> 'Croatian' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:03,134 INFO Παναμάς vs Κροατία -> Panama vs Croatian
+2026-06-25 11:00:03,419 INFO Translated unknown team 'Ιορδανία' -> 'Jordan' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:03,698 INFO Translated unknown team 'Αλγερία' -> 'Algeria' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:03,699 INFO Ιορδανία vs Αλγερία -> Jordan vs Algeria
+2026-06-25 11:00:03,968 INFO Translated unknown team 'ΕΚΟΥΑΔΟΡ' -> 'ECUADOR' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:04,298 INFO Translated unknown team 'ΓΕΡΜΑΝΙΑ' -> 'GERMANY' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:04,299 INFO ΕΚΟΥΑΔΟΡ vs ΓΕΡΜΑΝΙΑ -> ECUADOR vs GERMANY
+2026-06-25 11:00:04,562 INFO Translated unknown team 'Αργεντινή' -> 'Argentina' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:04,899 INFO Translated unknown team 'Αυστρία' -> 'Austria' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:04,900 INFO Αργεντινή vs Αυστρία -> Argentina vs Austria
+2026-06-25 11:00:05,185 INFO Translated unknown team 'Ιαπωνία' -> 'Japan' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:05,186 INFO Ιαπωνία vs Σουηδία -> Japan vs Sweden
+2026-06-25 11:00:05,187 INFO Βάρμπεργκ vs Λαντσκρόνα -> Varbergs Bois vs Landskrona Bois
+2026-06-25 11:00:05,481 INFO Translated unknown team 'Εκουαδόρ' -> 'Ecuador' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:05,795 INFO Translated unknown team 'Γερμανία' -> 'Germany' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:05,796 INFO Εκουαδόρ vs Γερμανία -> Ecuador vs Germany
+2026-06-25 11:00:05,796 INFO Βάρμπεργκ vs Λαντσκρόνα -> Varbergs Bois vs Landskrona Bois
+2026-06-25 11:00:06,084 INFO Translated unknown team 'Νότια Αφρική' -> 'South Africa' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:06,352 INFO Translated unknown team 'Νότια Κορέα' -> 'South Korea' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:06,353 INFO Νότια Αφρική vs Νότια Κορέα -> South Africa vs South Korea
+2026-06-25 11:00:06,630 INFO Translated unknown team 'Παναμάς' -> 'Panama' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:06,956 INFO Translated unknown team 'Κροατία' -> 'Croatian' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:06,956 INFO Παναμάς vs Κροατία -> Panama vs Croatian
+2026-06-25 11:00:07,250 INFO Translated unknown team 'Ιαπωνία' -> 'Japan' (consider adding to KNOWN_TEAMS)
+2026-06-25 11:00:07,251 INFO Ιαπωνία vs Σουηδία -> Japan vs Sweden
+2026-06-25 11:00:07,253 INFO Wrote translated tips to /app/last_sent.json
+[Thu Jun 25 11:00:07 UTC 2026] Starting bet placement step...
+2026-06-25 11:00:07,863 INFO Logged into Matchbook as nintza13
+2026-06-25 11:00:08,362 WARNING No matching market/runner for Grobina vs Auda
+2026-06-25 11:00:08,886 WARNING No Matchbook event found for Panama vs Croatian
+2026-06-25 11:00:09,299 INFO Tip is not a simple 1/2/X bet, sending for manual review: Ιορδανία - Αλγερία
+(23/6, 06:00)
+1.55
+2026-06-25 11:00:09,699 INFO Tip is not a simple 1/2/X bet, sending for manual review: ΕΚΟΥΑΔΟΡ - ΓΕΡΜΑΝΙΑ 25/06 23:00 Goal/Goal & Over 2.5 2.08
+2026-06-25 11:00:10,092 INFO Tip is not a simple 1/2/X bet, sending for manual review: Αργεντινή - Αυστρία
+1
+2026-06-25 11:00:10,472 INFO Tip is not a simple 1/2/X bet, sending for manual review: 26/06
+02:00
+Ιαπωνία
+Σουηδία
+G/G
+1.68
+2026-06-25 11:00:10,806 INFO Tip is not a simple 1/2/X bet, sending for manual review: Βάρμπεργκ - Λαντσκρόνα
+1
+2026-06-25 11:00:12,139 INFO Bet placed: Ecuador vs Germany, selection=2, odds=1.56, stake=0.1, status=matched
+2026-06-25 11:00:12,623 WARNING No Matchbook event found for Varbergs Bois vs Landskrona Bois
+2026-06-25 11:00:13,455 WARNING No Matchbook event found for South Africa vs South Korea
+2026-06-25 11:00:13,846 INFO Tip is not a simple 1/2/X bet, sending for manual review: 23/6
+Παναμάς - Κροατία
+2026-06-25 11:00:14,206 INFO Tip is not a simple 1/2/X bet, sending for manual review: Χ2
+1.83
+Ιαπωνία
+Σουηδία
+[Thu Jun 25 11:00:14 UTC 2026] Done.
+[Fri Jun 26 11:00:02 UTC 2026] Starting translate step...
+Traceback (most recent call last):
+  File "/app/autobet/translate_tips.py", line 18, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+[Sat Jun 27 11:00:01 UTC 2026] Starting translate step...
+Traceback (most recent call last):
+  File "/app/autobet/translate_tips.py", line 18, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+[Sun Jun 28 11:00:01 UTC 2026] Starting translate step...
+Traceback (most recent call last):
+  File "/app/autobet/translate_tips.py", line 18, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+[Mon Jun 29 11:00:01 UTC 2026] Starting translate step...
+Traceback (most recent call last):
+  File "/app/autobet/translate_tips.py", line 18, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+[Tue Jun 30 11:00:01 UTC 2026] Starting translate step...
+Traceback (most recent call last):
+  File "/app/autobet/translate_tips.py", line 18, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+[Wed Jul  1 11:00:01 UTC 2026] Starting translate step...
+Traceback (most recent call last):
+  File "/app/autobet/translate_tips.py", line 18, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+[Thu Jul  2 11:00:01 UTC 2026] Starting translate step...
+Traceback (most recent call last):
+  File "/app/autobet/translate_tips.py", line 18, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'

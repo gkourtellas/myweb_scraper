@@ -1,0 +1,17 @@
+[Unit]
+Description=Matchbook live football back-bet bot
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/matchbook
+EnvironmentFile=/opt/matchbook/.env
+ExecStart=/opt/matchbook/.venv/bin/python /opt/matchbook/matchbook_live_bot.py
+Restart=always
+RestartSec=30
+User=matchbook
+Group=matchbook
+
+[Install]
+WantedBy=multi-user.target
