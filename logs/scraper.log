@@ -1,0 +1,200 @@
+===== 2026-07-02T11:47:31+00:00 run start =====
+Starting bot...
+
+Checking: https://sportbet.gr/prognostika-to-dynato-simeio-imeras/
+🔍 Raw content: Λιν - Ασάνε
+1
+1.85
+ℹ️ Tip already sent (content is mostly the same).
+
+Checking: https://www.foxbet.gr/316014/to-stantar-tis-imeras
+🔍 Raw content: Ισπανία - Αυστρία
+(22:00)
+1 & Under 3,5
+2.05
+ℹ️ Tip already sent (content is mostly the same).
+
+Checking: https://www.bethome.gr/prognostika-to-simeio-tis-imeras/
+Selector error for #main > div.betting-tips.mb-5 > div.betting-tips-listing.betting-tips-listing--rounded.betting-tips-listing--is-active-tip.betting-tips-listing--open > div.betting-tips-listing__table > div:nth-child(2): Page.wait_for_selector: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("#main > div.betting-tips.mb-5 > div.betting-tips-listing.betting-tips-listing--rounded.betting-tips-listing--is-active-tip.betting-tips-listing--open > div.betting-tips-listing__table > div:nth-child(2)") to be visible
+
+🔍 Raw content: 
+✅ Tip found for today:
+
+⚠️ Empty message, not sending to Telegram.
+Telegram send failed for https://www.bethome.gr/prognostika-to-simeio-tis-imeras/; not updating dedupe state.
+Kingbet tab selection timed out on https://www.kingbet.com.cy/to-dynato-simeio-imeras/: ElementHandle.click: Timeout 30000ms exceeded.
+Call log:
+  - attempting click action
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <img width="1200" height="900" loading="lazy" alt="Δυνατό της ημέρας" src="https://www.kingbet.com.cy/wp-content/uploads/2025/09/TO-DYNATO-THS-HMERAS.jpg"/> from <div class="block betting-features__category-banner">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting for element to be visible, enabled and stable
+    - element is not stable
+  - retrying click action
+    - waiting 20ms
+    - waiting for element to be visible, enabled and stable
+    - element is not stable
+  2 × retrying click action
+      - waiting 100ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div height="720" class="qc-cmp-cleanslate css-1bzww9z">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+  12 × retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div height="720" class="qc-cmp-cleanslate css-1bzww9z">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div class="">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div height="720" class="qc-cmp-cleanslate css-1bzww9z">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div height="720" class="qc-cmp-cleanslate css-1bzww9z">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div height="720" class="qc-cmp-cleanslate css-1bzww9z">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div class="">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+
+Kingbet tab selection timed out on https://www.kingbet.com.cy/favori-imeras/: ElementHandle.click: Timeout 30000ms exceeded.
+Call log:
+  - attempting click action
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div class="">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div height="720" class="qc-cmp-cleanslate css-1bzww9z">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 20ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div class="">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+  2 × retrying click action
+      - waiting 100ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div height="720" class="qc-cmp-cleanslate css-1bzww9z">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+  12 × retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div height="720" class="qc-cmp-cleanslate css-1bzww9z">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div class="">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div height="720" class="qc-cmp-cleanslate css-1bzww9z">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div height="720" class="qc-cmp-cleanslate css-1bzww9z">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div height="720" class="qc-cmp-cleanslate css-1bzww9z">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div class="">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div height="720" class="qc-cmp-cleanslate css-1bzww9z">…</div> from <div data-nosnippet="" id="qc-cmp2-container" class="qc-cmp2-container">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+
+
+Checking: https://www.sentragoal.gr/dunato-simeio-imeras/
+🔍 Raw content: 02/07
+19:00
+Ρουμανία
+
+
+Ελλάδα
+Τολιόπουλος Over 13.5 Πόντοι
+1.93
+ℹ️ Tip already sent (content is mostly the same).
+
+Checking: https://www.foxbet.gr/316026/to-dunato-simeio-tis-imeras
+Selector error for body > main > div > div > div.col-12.col-xl-9.main-content > div > div.bpcontent.p-4.post_content > table.table.table-striped.table-hover.table-bordered.table-sm.scode1 > tbody > tr:nth-child(2): Page.wait_for_selector: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("body > main > div > div > div.col-12.col-xl-9.main-content > div > div.bpcontent.p-4.post_content > table.table.table-striped.table-hover.table-bordered.table-sm.scode1 > tbody > tr:nth-child(2)") to be visible
+
+🔍 Raw content: 
+✅ Tip found for today:
+
+⚠️ Empty message, not sending to Telegram.
+Telegram send failed for https://www.foxbet.gr/316026/to-dunato-simeio-tis-imeras; not updating dedupe state.
+===== 2026-07-02T11:49:55+00:00 run end, sleeping 3600s =====
