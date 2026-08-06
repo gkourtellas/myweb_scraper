@@ -34,5 +34,13 @@
   {
     "title": "N8N",
     "url": "http://monitor:5678/projects/oWQ2cRKtbTx25tA9/workflows"
+  },
+  {
+    "title": "BetDex Dashboard",
+    "url": "http://monitor:8051"
+  },
+  {
+    "title": "UpTime Kuma",
+    "url": "http://http://monitor:3001/"
   }
 ]

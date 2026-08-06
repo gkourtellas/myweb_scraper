@@ -430,6 +430,9 @@ INDEX_HTML = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <script>
+  document.write('<base href="' + (window.location.pathname.startsWith('/app1') ? '/app1/' : '/') + '">');
+  </script>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -493,7 +496,7 @@ INDEX_HTML = r"""<!DOCTYPE html>
 
   <script>
     async function fetchStatus() {
-      const res = await fetch('/api/status');
+      const res = await fetch('api/status');
       const data = await res.json();
       document.getElementById('active-state').textContent = data.active ? 'active' : 'inactive';
       document.getElementById('sub-state').textContent = data.sub || 'unknown';
@@ -506,7 +509,7 @@ INDEX_HTML = r"""<!DOCTYPE html>
     }
 
     async function fetchTips() {
-      const res = await fetch('/api/today');
+      const res = await fetch('api/today');
       const data = await res.json();
       const body = document.getElementById('tips-body');
       const noTips = document.getElementById('no-tips');
@@ -542,7 +545,7 @@ INDEX_HTML = r"""<!DOCTYPE html>
     }
 
     function openLogs() {
-      window.open('/logs?ts=' + Date.now(), '_blank');
+      window.open('logs?ts=' + Date.now(), '_blank');
     }
 
     async function sendAction(action) {
@@ -552,7 +555,7 @@ INDEX_HTML = r"""<!DOCTYPE html>
         return;
       }
       document.getElementById('action-result').textContent = 'waiting...';
-      const res = await fetch('/api/action', {
+      const res = await fetch('api/action', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `action=${action}`

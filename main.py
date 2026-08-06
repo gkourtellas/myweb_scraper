@@ -3,30 +3,39 @@ import os
 import re
 import time
 import difflib
-from datetime import datetime
+from datetime import datetime, timedelta
 from playwright.sync_api import sync_playwright
 
 from notify import send_message
 
 #print("Script started", flush=True)
 #print("Script Started")
-# Clears old entries from previous days from the log file, keeping all of today's entries
-def clear_log_daily(log_file):
+# Clears old entries from previous days from the log file, keeping today's
+# entries plus a small buffer of previous days (tips scraped the night
+# before a match are stamped with the previous day's date, so a strict
+# "today only" filter was deleting them before the match ever happened).
+def clear_log_daily(log_file, keep_days=1):
     if os.path.exists(log_file):
         try:
             with open(log_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
         except Exception:
             data = {}
-        
-        today_str = datetime.today().strftime("%Y-%m-%d")
+
+        cutoff = datetime.today().date() - timedelta(days=keep_days)
         updated_data = {}
-        
-        # Only keep log entries that were stored today
+
+        # Only keep log entries from the cutoff date onward
         for key, val in data.items():
-            if isinstance(val, dict) and val.get("date") == today_str:
+            if not isinstance(val, dict) or not val.get("date"):
+                continue
+            try:
+                entry_date = datetime.strptime(val["date"], "%Y-%m-%d").date()
+            except ValueError:
+                continue
+            if entry_date >= cutoff:
                 updated_data[key] = val
-                
+
         with open(log_file, "w", encoding="utf-8") as f:
             json.dump(updated_data, f, ensure_ascii=False, indent=2)
 

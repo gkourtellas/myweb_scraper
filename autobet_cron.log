@@ -233,3 +233,37 @@ Traceback (most recent call last):
   File "/app/autobet/translate_tips.py", line 18, in <module>
     from dotenv import load_dotenv
 ModuleNotFoundError: No module named 'dotenv'
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
+OCI runtime exec failed: exec failed: unable to start container process: exec: "/app/autobet/run_autobet.sh": stat /app/autobet/run_autobet.sh: no such file or directory
