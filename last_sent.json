@@ -1,34 +1,30 @@
 {
-  "https://sportbet.gr/prognostika-to-dynato-simeio-imeras/|#featured_archive > div.featured-item.active > table > tbody > tr:nth-child(1) > td.names.hidden-sm-down,#featured_archive > div.featured-item.active > table > tbody > tr:nth-child(3) > td:nth-child(3),#featured_archive > div.featured-item.active > table > tbody > tr:nth-child(3) > td:nth-child(4)": {
-    "text": "Στεάουα - Φαρούλ\n1\n1.78",
-    "date": "2026-08-02"
-  },
-  "https://www.foxbet.gr/316014/to-stantar-tis-imeras|table.prediction_bet_1_3cols tbody tr:first-child td:nth-child(1),table.prediction_bet_1_3cols tbody tr:first-child td:nth-child(2),table.prediction_bet_1_3cols tbody tr:first-child td:nth-child(3)": {
-    "text": "Ντίλα Γκόρι - Απόλλων Λεμεσού\n(19:00)\n2\n2.01",
-    "date": "2026-07-23"
+  "https://sportbet.gr/prognostika-to-dynato-simeio-imeras/|#main-content > div.content-wrap.has-side > div > div > div.sb-fc-heroWrap": {
+    "text": "Βέλγιο | ΑΝΤΕΡΛΕΧΤ – ΚΟΡΤΡΑΪΚ | 21:30 | ΑΝΤΕΡΛΕΧΤ ΤΕΛΙΚΟ ΑΠΟΤΕΛΕΣΜΑ | 1.52",
+    "date": "2026-09-03"
   },
   "https://www.kingbet.com.cy/favori-imeras/|div.betting-features__listing div.betting-feature.block:first-child .betting-feature__match-name,div.betting-features__listing div.betting-feature.block:first-child .betting-feature__prediction,div.betting-features__listing div.betting-feature.block:first-child .betting-feature__affiliate-link": {
-    "text": "Χιμπέρνιαν - Σκεντίγια\n1\nΑπόδοση: 1.50",
-    "date": "2026-08-06"
+    "text": "Φόλκερκ - Ρέιντζερς\n2\nΑπόδοση: 1.62",
+    "date": "2026-09-03"
   },
   "https://www.sentragoal.gr/dunato-simeio-imeras/|div[id^='predictions_'][id$='_page_container'] > table > tbody > tr:nth-child(2) > td.predictions_table__date.text-center.font-0-8.text-nowrap.text-gray-500,div[id^='predictions_'][id$='_page_container'] > table > tbody > tr:nth-child(2) > td.predictions_table__fixture.text-start.font-0-9,div[id^='predictions_'][id$='_page_container'] > table > tbody > tr:nth-child(2) > td.predictions_table__market.text-start.fw-medium.font-0-9,div[id^='predictions_'][id$='_page_container'] > table > tbody > tr:nth-child(2) > td.predictions_table__betting-odd.text-center.text-nowrap": {
-    "text": "06/08\n20:00\nΛίνκολν Ρεντ Ιμ.\nΟμόνοια\n2 (-1 Α.Η.)\n1.88",
-    "date": "2026-08-06"
-  },
-  "https://www.bethome.gr/prognostika-to-simeio-tis-imeras/|#main > div.betting-tips.mb-5 > div.betting-tips-listing.betting-tips-listing--rounded.betting-tips-listing--is-active-tip.betting-tips-listing--open > div.betting-tips-listing__table > div:nth-child(2)": {
-    "text": "ΧΑΠΟΕΛ ΜΠΕΡ ΣΕΒΑ - ΕΡΥΘΡΟΣ ΑΣΤΕΡΑΣ 04/08 20:30 2 1.90",
-    "date": "2026-08-03"
-  },
-  "https://www.foxbet.gr/316026/to-dunato-simeio-tis-imeras|div.prediction-card__header,div.prediction-card__match-block": {
-    "text": "Τελικό Αποτέλεσμα - Σεν Γκάλεν\n1.95\nΣέριφ Τίρασπολ\nΣεν Γκάλεν",
-    "date": "2026-08-06"
-  },
-  "https://www.kingbet.com.cy/to-dynato-simeio-imeras/|div.betting-features__listing div.betting-feature.block:first-child .betting-feature__match-name,div.betting-features__listing div.betting-feature.block:first-child .betting-feature__prediction,div.betting-features__listing div.betting-feature.block:first-child .betting-feature__affiliate-link": {
-    "text": "ΠΑΟΚ - Άντερλεχτ\n1\nΑπόδοση: 1.79",
-    "date": "2026-08-06"
+    "text": "02/09\n21:45\nΜίλγουολ\nΡέξαμ\n2 DNB\n2.27",
+    "date": "2026-09-02"
   },
   "https://www.foxbet.gr/316014/to-stantar-tis-imeras|.prediction-card__header,.prediction-card__match-block": {
-    "text": "2 & Under 4,5\n2.06\nΛίνκολν Ρεντ Ιμ.\nΟμόνοια Λευκωσί.",
-    "date": "2026-08-05"
+    "text": "Τελικό Αποτέλεσμα - Λιλ\n2.22\nΤουλούζ\nΛιλ",
+    "date": "2026-09-03"
+  },
+  "https://www.kingbet.com.cy/to-dynato-simeio-imeras/|div.betting-features__listing div.betting-feature.block:first-child .betting-feature__match-name,div.betting-features__listing div.betting-feature.block:first-child .betting-feature__prediction,div.betting-features__listing div.betting-feature.block:first-child .betting-feature__affiliate-link": {
+    "text": "Γκρασχόπερς - Σεν Γκάλεν\n2\nΑπόδοση: 1.75",
+    "date": "2026-09-03"
+  },
+  "https://www.foxbet.gr/316026/to-dunato-simeio-tis-imeras|div.prediction-card__header,div.prediction-card__match-block": {
+    "text": "Ημίχρονο ή τελικό: Τουν\n1.67\nΤουν\nΛωζάνη",
+    "date": "2026-09-02"
+  },
+  "https://www.bethome.gr/prognostika-to-simeio-tis-imeras/|#main > div.betting-tips.mb-5 > div.betting-tips-listing.betting-tips-listing--rounded.betting-tips-listing--is-active-tip.betting-tips-listing--open > div.betting-tips-listing__table > div:nth-child(2)": {
+    "text": "ΛΕΤΣΕ - ΡΟΜΑ 31/08 19:30 2 & Over 1.5 1.85",
+    "date": "2026-08-31"
   }
 }

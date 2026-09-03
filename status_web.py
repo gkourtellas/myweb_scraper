@@ -6,6 +6,9 @@ from datetime import datetime, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
+import db
+
+APP_VERSION = "1.2.2"
 SERVICE_NAME = "myweb_scraper"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SENT_LOG_FILE = os.path.join(BASE_DIR, "sent_log.json")
@@ -231,14 +234,15 @@ def get_sent_tips():
     for key, val in data.items():
         url = key.split("|", 1)[0]
         site = format_site_alias(extract_site_name(url))
-        
+
         if isinstance(val, dict):
             tip_text = val.get("text", "")
         else:
             tip_text = val
-            
+
         tips_by_site.setdefault(site, []).append({
             "tip": tip_text,
+            "tip_key": key,
         })
 
     return tips_by_site
@@ -288,9 +292,35 @@ def shutdown_server():
     raise KeyboardInterrupt
 
 
+def perform_run_now():
+    if use_docker_runtime():
+        container = get_docker_scraper_container()
+        if container is None:
+            return False, f"Container '{DOCKER_SCRAPER_CONTAINER}' not found"
+        try:
+            container.exec_run(["python", "main.py"], detach=True)
+        except Exception as exc:
+            return False, str(exc)
+        return True, "Triggered one-off scrape inside scraper container"
+
+    try:
+        subprocess.Popen(
+            [sys.executable, "main.py"],
+            cwd=BASE_DIR,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    except Exception as exc:
+        return False, str(exc)
+    return True, "Triggered one-off scrape run"
+
+
 def perform_action(action):
     if action == "restart_console":
         return True, "Console reload handled by UI"
+
+    if action == "run_now":
+        return perform_run_now()
 
     if use_docker_runtime():
         return perform_docker_action(action)
@@ -323,14 +353,24 @@ class StatusHandler(BaseHTTPRequestHandler):
                 self.send_header(name, value)
         self.end_headers()
 
+    def _json(self, payload, status=200):
+        self._set_headers(status, "application/json")
+        self.wfile.write(json.dumps(payload).encode("utf-8"))
+
     def do_GET(self):
         parsed = urlparse(self.path)
         if parsed.path == "/":
             return self._serve_index()
+        if parsed.path == "/manifest.json":
+            return self._serve_manifest()
+        if parsed.path == "/sw.js":
+            return self._serve_sw()
         if parsed.path == "/api/status":
             return self._serve_status()
         if parsed.path == "/api/today":
             return self._serve_today()
+        if parsed.path == "/api/favorites":
+            return self._serve_favorites_get(parsed)
         if parsed.path == "/logs":
             return self._serve_logs()
         self._set_headers(404, "application/json")
@@ -344,11 +384,65 @@ class StatusHandler(BaseHTTPRequestHandler):
             params = parse_qs(post_data)
             action = params.get("action", [""])[0]
             success, output = perform_action(action)
-            self._set_headers(200, "application/json")
-            self.wfile.write(json.dumps({"success": success, "action": action, "output": output}).encode("utf-8"))
+            self._json({"success": success, "action": action, "output": output})
             return
+        if parsed.path == "/api/favorites":
+            return self._serve_favorites_post()
         self._set_headers(404, "application/json")
         self.wfile.write(json.dumps({"error": "not found"}).encode("utf-8"))
+
+    def do_DELETE(self):
+        parsed = urlparse(self.path)
+        if parsed.path == "/api/favorites":
+            return self._serve_favorites_delete(parsed)
+        self._set_headers(404, "application/json")
+        self.wfile.write(json.dumps({"error": "not found"}).encode("utf-8"))
+
+    # ---- favorites/users ----
+
+    def _serve_favorites_get(self, parsed):
+        qs = parse_qs(parsed.query)
+        user_name = (qs.get("user", [""])[0] or "").strip()
+        if not user_name:
+            return self._json({"error": "missing 'user' query param"}, 400)
+        user = db.get_or_create_user(user_name)
+        favorites = db.list_favorites(user["id"])
+        self._json({"user": user, "favorites": favorites})
+
+    def _read_json_body(self):
+        length = int(self.headers.get("Content-Length", 0))
+        raw = self.rfile.read(length).decode("utf-8") if length else ""
+        content_type = self.headers.get("Content-Type", "")
+        if "application/json" in content_type:
+            try:
+                return json.loads(raw) if raw else {}
+            except Exception:
+                return {}
+        # fallback: form-encoded
+        parsed = parse_qs(raw)
+        return {k: v[0] for k, v in parsed.items()}
+
+    def _serve_favorites_post(self):
+        body = self._read_json_body()
+        user_name = (body.get("user") or "").strip()
+        tip_key = (body.get("tip_key") or "").strip()
+        if not user_name or not tip_key:
+            return self._json({"error": "missing 'user' or 'tip_key'"}, 400)
+        user = db.get_or_create_user(user_name)
+        db.add_favorite(user["id"], tip_key, body.get("tip_text"), body.get("site"))
+        self._json({"success": True, "user": user, "favorites": db.list_favorites(user["id"])})
+
+    def _serve_favorites_delete(self, parsed):
+        qs = parse_qs(parsed.query)
+        user_name = (qs.get("user", [""])[0] or "").strip()
+        tip_key = (qs.get("tip_key", [""])[0] or "").strip()
+        if not user_name or not tip_key:
+            return self._json({"error": "missing 'user' or 'tip_key'"}, 400)
+        user = db.get_or_create_user(user_name)
+        db.remove_favorite(user["id"], tip_key)
+        self._json({"success": True, "user": user, "favorites": db.list_favorites(user["id"])})
+
+    # ---- existing routes ----
 
     def _serve_status(self):
         status = get_service_status()
@@ -414,13 +508,43 @@ class StatusHandler(BaseHTTPRequestHandler):
         self._set_headers(404, "text/plain; charset=utf-8")
         self.wfile.write(b"No usable log output found. Check output.log, nohup.out, or journalctl.")
 
+    def _serve_manifest(self):
+        manifest = {
+            "name": "Tips Console",
+            "short_name": "Tips",
+            "start_url": "/",
+            "display": "standalone",
+            "background_color": "#0c0d16",
+            "theme_color": "#0c0d16",
+            "icons": [
+                {
+                    "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23dd4814'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle' fill='white'%3E%E2%9A%BD%3C/text%3E%3C/svg%3E",
+                    "sizes": "192x192",
+                    "type": "image/svg+xml",
+                }
+            ],
+        }
+        self._set_headers(200, "application/json")
+        self.wfile.write(json.dumps(manifest).encode("utf-8"))
+
+    def _serve_sw(self):
+        sw_js = """
+self.addEventListener('install', e => self.skipWaiting());
+self.addEventListener('activate', e => self.clients.claim());
+self.addEventListener('fetch', e => {
+  e.respondWith(fetch(e.request).catch(() => new Response('Offline', { status: 503 })));
+});
+"""
+        self._set_headers(200, "application/javascript")
+        self.wfile.write(sw_js.encode("utf-8"))
+
     def _serve_index(self):
         self._set_headers(200, "text/html", {
             "Cache-Control": "no-cache, no-store, must-revalidate",
             "Pragma": "no-cache",
             "Expires": "0",
         })
-        self.wfile.write(INDEX_HTML.encode("utf-8"))
+        self.wfile.write(INDEX_HTML.replace("APP_VERSION_PLACEHOLDER", APP_VERSION).encode("utf-8"))
 
     def log_message(self, format, *args):
         return
@@ -430,132 +554,340 @@ INDEX_HTML = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <script>
-  document.write('<base href="' + (window.location.pathname.startsWith('/app1') ? '/app1/' : '/') + '">');
-  </script>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bot Status</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0c0d16">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Tips Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; margin: 24px; background:#f7f8fb; color:#222; }
-    h1 { margin-bottom: 8px; }
-    .card { background: #fff; border: 1px solid #d9dee7; border-radius: 10px; padding: 18px; margin-bottom: 18px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
-    button { margin-right: 10px; padding: 10px 14px; border:none; border-radius: 6px; cursor:pointer; font-weight: 600; }
-    .btn-start { background:#2f9d27; color:#fff; }
-    .btn-stop { background:#d6392e; color:#fff; }
-    .btn-restart { background:#1677ff; color:#fff; }
-    .status { font-size: 1rem; margin-top: 10px; }
-    .site { margin-bottom: 14px; }
-    pre { background:#0f172a; color:#d6e4ff; padding:12px; border-radius:8px; overflow:auto; }
+    :root {
+      --bg: #0c0d16;
+      --panel: #131424;
+      --panel2: #16161e;
+      --card: #1c1c27;
+      --border: #272a47;
+      --border2: #252533;
+      --text: #f3f2ee;
+      --muted: #a8a29e;
+      --muted2: #7a8699;
+      --accent: #f59e0b;
+      --accent2: #dd4814;
+      --win: #34d399;
+      --loss: #fb7185;
+      --info: #38bdf8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; background: var(--bg); color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 28px 20px 60px; }
+    header {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      margin-bottom: 22px; flex-wrap: wrap;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .logo {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: linear-gradient(135deg, #fbbf24, #dd4814);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; color: #1a1300; font-size: 18px;
+    }
+    .brand h1 { margin: 0; font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em; }
+    .brand p { margin: 0; font-size: 0.72rem; color: var(--muted2); display: flex; align-items: center; gap: 6px; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--win); display: inline-block; }
+    .dot.off { background: var(--loss); }
+    .btn {
+      border: none; border-radius: 10px; padding: 9px 14px; font-weight: 700; font-size: 0.78rem;
+      cursor: pointer; transition: all .15s ease; font-family: inherit;
+    }
+    .btn-accent { background: linear-gradient(135deg, #f59e0b, #dd4814); color: #1a1300; }
+    .btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--border2); }
+    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .card {
+      background: var(--panel); border: 1px solid var(--border); border-radius: 20px;
+      padding: 20px; margin-bottom: 18px;
+    }
+    .card h2 {
+      margin: 0 0 14px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--muted2); font-weight: 700;
+    }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+    .stat { background: var(--card); border: 1px solid var(--border2); border-radius: 14px; padding: 14px; }
+    .stat-label { font-size: 0.68rem; text-transform: uppercase; color: var(--muted2); letter-spacing: 0.04em; margin-bottom: 6px; }
+    .stat-value { font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; font-weight: 700; }
+    .stat-value.on { color: var(--win); }
+    .stat-value.off { color: var(--loss); }
+
+    .action-result { margin-top: 12px; font-size: 0.75rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; justify-content: space-between; }
+    .search-box { position: relative; flex: 1; min-width: 200px; }
+    .search-box input {
+      width: 100%; padding: 9px 12px 9px 34px; border-radius: 10px; background: #0a0b14;
+      border: 1px solid var(--border); color: var(--text); font-size: 0.8rem; font-family: inherit;
+    }
+    .search-box input:focus { outline: none; border-color: var(--accent); }
+    .search-box::before {
+      content: "⌕"; position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      color: var(--muted2); font-size: 0.9rem;
+    }
+    .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .chip {
+      padding: 6px 12px; border-radius: 10px; font-size: 0.72rem; font-weight: 700;
+      background: var(--card); color: var(--muted); border: 1px solid var(--border2); cursor: pointer;
+    }
+    .chip.active { background: var(--accent); color: #1a1300; border-color: var(--accent); }
+
+    .tip-row {
+      display: flex; align-items: flex-start; gap: 12px; padding: 14px; border-radius: 14px;
+      background: var(--card); border: 1px solid var(--border2); margin-bottom: 10px;
+    }
+    .tip-badge {
+      flex-shrink: 0; padding: 4px 10px; border-radius: 8px; font-size: 0.68rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.03em; white-space: nowrap;
+    }
+    .tip-body { flex: 1; min-width: 0; }
+    .tip-text { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; white-space: pre-wrap; color: var(--text); line-height: 1.5; }
+    .tip-fav {
+      flex-shrink: 0; background: none; border: 1px solid var(--border2); border-radius: 10px;
+      width: 34px; height: 34px; font-size: 1rem; cursor: pointer; color: var(--muted2);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tip-fav.active { color: var(--accent); border-color: var(--accent); background: rgba(245,158,11,0.1); }
+    .empty { color: var(--muted2); font-size: 0.8rem; text-align: center; padding: 30px 0; }
+
+    pre.raw {
+      background: #090a10; color: #d6e4ff; padding: 14px; border-radius: 12px; overflow: auto;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; border: 1px solid var(--border2);
+      max-height: 240px;
+    }
+
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+      z-index: 50; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--panel); border: 1px solid var(--border); border-radius: 18px;
+      width: 100%; max-width: 800px; max-height: 80vh; display: flex; flex-direction: column; overflow: hidden;
+    }
+    .modal-head {
+      display: flex; align-items: center; justify-content: space-between; padding: 14px 18px;
+      border-bottom: 1px solid var(--border2);
+    }
+    .modal-head h3 { margin: 0; font-size: 0.9rem; font-weight: 700; }
+    .modal-close { background: none; border: none; color: var(--muted); font-size: 1.1rem; cursor: pointer; }
+    .modal-body { padding: 14px 18px; overflow: auto; }
+    .modal-body pre { margin: 0; max-height: none; }
+    .modal-overlay { padding: 0; }
+    .modal-box { max-width: 100%; max-height: 100vh; height: 100vh; border-radius: 0; }
+    .modal-body { flex: 1; }
+    .version-tag { font-size: 0.62rem; color: var(--muted2); font-family: 'JetBrains Mono', monospace; margin-left: 8px; }
+
+    @media (max-width: 640px) {
+      .modal-overlay { padding: 0; }
+      .modal-box { max-width: 100%; max-height: 100vh; height: 100vh; border-radius: 0; }
+      .modal-body { flex: 1; }
+    }
   </style>
 </head>
 <body>
-  <h1>Bot Status Dashboard</h1>
-  <div class="card">
-    <div><strong>Service:</strong> <span id="service-name">myweb_scraper</span></div>
-    <div class="status"><strong>Active:</strong> <span id="active-state">loading...</span></div>
-    <div class="status"><strong>Sub-state:</strong> <span id="sub-state">loading...</span></div>
-    <div class="status"><strong>Loaded:</strong> <span id="loaded-state">loading...</span></div>
-    <div class="status"><strong>Bot uptime:</strong> <span id="uptime">loading...</span></div>
-    <div class="status"><strong>Started at:</strong> <span id="since">loading...</span></div>
-    <div class="status"><strong>Systemctl available:</strong> <span id="systemctl-available">loading...</span></div>
-    <div class="status"><strong>Instances:</strong> <span id="instances">loading...</span></div>
-    <div style="margin-top:16px;">
-      <button class="btn-start" onclick="sendAction('start')">Start</button>
-      <button class="btn-stop" onclick="sendAction('stop')">Stop</button>
-      <button class="btn-restart" onclick="sendAction('restart')">Restart</button>
-      <button class="btn-restart" onclick="sendAction('restart_console')">Restart Console</button>
-      <button class="btn-restart" onclick="openLogs()">Open Logs</button>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">⚽</div>
+        <div>
+          <h1>Tips Console <span class="version-tag">vAPP_VERSION_PLACEHOLDER</span></h1>
+          <p><span class="dot" id="brand-dot"></span> <span id="brand-status">connecting...</span></p>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-accent" id="run-now-btn" onclick="sendAction('run_now')">▶ Run Scrape Now</button>
+        <button class="btn btn-secondary" onclick="openLogs()">☰ Logs</button>
+      </div>
+    </header>
+
+    <div class="card">
+      <h2>Today's Tips <span id="tip-count" style="color:var(--accent);"></span></h2>
+      <div class="toolbar">
+        <div class="search-box"><input id="search-input" placeholder="Search event or tipster..." oninput="renderTips()"/></div>
+        <div class="chips" id="site-chips"></div>
+      </div>
+      <div id="tips-list"></div>
     </div>
-    <div class="status">Controls the <strong>myweb_scraper</strong> service/process, not the status page itself.</div>
-    <div class="status"><strong>Last action:</strong> <span id="action-result">none</span></div>
+
+    <div class="card">
+      <h2>Diagnostic Output</h2>
+      <pre class="raw" id="raw-output">loading...</pre>
+    </div>
+
+    <div class="card">
+      <h2>Service Status</h2>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-label">Active</div><div class="stat-value" id="active-state">-</div></div>
+        <div class="stat"><div class="stat-label">Sub-state</div><div class="stat-value" id="sub-state">-</div></div>
+        <div class="stat"><div class="stat-label">Uptime</div><div class="stat-value" id="uptime">-</div></div>
+        <div class="stat"><div class="stat-label">Instances</div><div class="stat-value" id="instances">-</div></div>
+      </div>
+      <div class="btn-row" style="margin-top:16px;">
+        <button class="btn btn-secondary" onclick="sendAction('start')">Start</button>
+        <button class="btn btn-secondary" onclick="sendAction('stop')">Stop</button>
+        <button class="btn btn-secondary" onclick="sendAction('restart')">Restart</button>
+      </div>
+      <div class="action-result" id="action-result">Ready.</div>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>Today's Sent Tips</h2>
-    <div><strong>Date:</strong> <span id="today-date">loading...</span></div>
-    <table id="tips-table" style="width:100%; border-collapse: collapse; margin-top: 12px;">
-      <thead>
-        <tr>
-          <th style="text-align:left; padding: 8px; border-bottom: 1px solid #d9dee7;">Tipster</th>
-          <th style="text-align:left; padding: 8px; border-bottom: 1px solid #d9dee7;">Tip</th>
-        </tr>
-      </thead>
-      <tbody id="tips-body"></tbody>
-    </table>
-    <div id="no-tips" style="margin-top:12px; color:#555;"></div>
-  </div>
-
-  <div class="card">
-    <h2>Service Details</h2>
-    <div class="status">Raw diagnostic output from the myweb_scraper service/process.</div>
-    <pre id="raw-output">loading...</pre>
+  <div class="modal-overlay" id="logs-modal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>Scraper Logs</h3>
+        <button class="modal-close" onclick="closeLogs()">✕</button>
+      </div>
+      <div class="modal-body"><pre id="logs-content">loading...</pre></div>
+    </div>
   </div>
 
   <script>
+    const FAV_USER = 'default';
+    let favoriteKeys = new Set();
+    let tipsBySite = {};
+    let activeSite = 'all';
+
+    const SITE_COLORS = ['#f59e0b', '#38bdf8', '#34d399', '#a78bfa', '#fb7185', '#818cf8'];
+    function colorFor(site) {
+      let hash = 0;
+      for (let i = 0; i < site.length; i++) hash = site.charCodeAt(i) + ((hash << 5) - hash);
+      return SITE_COLORS[Math.abs(hash) % SITE_COLORS.length];
+    }
+
     async function fetchStatus() {
-      const res = await fetch('api/status');
+      const res = await fetch('/api/status');
       const data = await res.json();
       document.getElementById('active-state').textContent = data.active ? 'active' : 'inactive';
+      document.getElementById('active-state').className = 'stat-value ' + (data.active ? 'on' : 'off');
       document.getElementById('sub-state').textContent = data.sub || 'unknown';
-      document.getElementById('loaded-state').textContent = data.loaded || 'unknown';
       document.getElementById('uptime').textContent = data.bot_uptime || 'unknown';
-      document.getElementById('since').textContent = data.bot_since || 'unknown';
-      document.getElementById('systemctl-available').textContent = data.available ? 'yes' : 'no';
-      document.getElementById('raw-output').textContent = data.status_output || 'no output';
       document.getElementById('instances').textContent = data.instances || 0;
+      document.getElementById('raw-output').textContent = data.status_output || 'no output';
+      document.getElementById('brand-dot').className = 'dot' + (data.active ? '' : ' off');
+      document.getElementById('brand-status').textContent = data.active ? 'Bot running' : 'Bot stopped';
+    }
+
+    async function fetchFavorites() {
+      try {
+        const res = await fetch('/api/favorites?user=' + encodeURIComponent(FAV_USER));
+        const data = await res.json();
+        favoriteKeys = new Set((data.favorites || []).map(f => f.tip_key));
+      } catch (err) {
+        favoriteKeys = new Set();
+      }
+    }
+
+    async function toggleFavorite(tipKey, tipText, site) {
+      if (favoriteKeys.has(tipKey)) {
+        await fetch('/api/favorites?user=' + encodeURIComponent(FAV_USER) + '&tip_key=' + encodeURIComponent(tipKey), { method: 'DELETE' });
+      } else {
+        await fetch('/api/favorites', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user: FAV_USER, tip_key: tipKey, tip_text: tipText, site: site })
+        });
+      }
+      await fetchFavorites();
+      renderTips();
     }
 
     async function fetchTips() {
-      const res = await fetch('api/today');
+      const res = await fetch('/api/today');
       const data = await res.json();
-      const body = document.getElementById('tips-body');
-      const noTips = document.getElementById('no-tips');
-      body.innerHTML = '';
-      const tips = data.tips_by_site || {};
-      const date = new Date();
-      document.getElementById('today-date').textContent = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
-      const rows = [];
-      for (const [site, items] of Object.entries(tips)) {
+      tipsBySite = data.tips_by_site || {};
+      renderChips();
+      renderTips();
+    }
+
+    function renderChips() {
+      const container = document.getElementById('site-chips');
+      const sites = Object.keys(tipsBySite);
+      let html = `<div class="chip ${activeSite === 'all' ? 'active' : ''}" onclick="setSite('all')">All</div>`;
+      sites.forEach(site => {
+        html += `<div class="chip ${activeSite === site ? 'active' : ''}" onclick="setSite('${site.replace(/'/g, "\\'")}')">${site}</div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    function setSite(site) {
+      activeSite = site;
+      renderChips();
+      renderTips();
+    }
+
+    function renderTips() {
+      const search = (document.getElementById('search-input').value || '').toLowerCase();
+      const list = document.getElementById('tips-list');
+      let rows = [];
+      for (const [site, items] of Object.entries(tipsBySite)) {
+        if (activeSite !== 'all' && site !== activeSite) continue;
         items.forEach(item => {
-          let displayedTip = '';
-          if (item && typeof item === 'object') {
-            displayedTip = item.tip !== undefined ? item.tip : '';
-          } else {
-            displayedTip = item || '';
-          }
-          rows.push({ site: site.replace(/[_-]/g, ' ').replace(/\s+/g, ' ').trim(), tip: displayedTip });
+          const tipText = (item && typeof item === 'object') ? (item.tip || '') : (item || '');
+          const tipKey = (item && typeof item === 'object') ? (item.tip_key || '') : '';
+          if (search && !tipText.toLowerCase().includes(search) && !site.toLowerCase().includes(search)) return;
+          rows.push({ site, tipText, tipKey });
         });
       }
+      document.getElementById('tip-count').textContent = rows.length ? `(${rows.length})` : '';
       if (!rows.length) {
-        noTips.textContent = 'No tips have been stored for today yet.';
+        list.innerHTML = '<div class="empty">No tips match right now.</div>';
         return;
       }
-      noTips.textContent = '';
-      rows.forEach(row => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td style="padding: 8px; border-bottom: 1px solid #f0f2f7;">${row.site}</td>
-          <td style="padding: 8px; border-bottom: 1px solid #f0f2f7; white-space: pre-wrap;">${row.tip}</td>
+      list.innerHTML = rows.map(row => {
+        const isFav = favoriteKeys.has(row.tipKey);
+        const color = colorFor(row.site);
+        const label = row.site.replace(/[_-]/g, ' ');
+        return `
+          <div class="tip-row">
+            <span class="tip-badge" style="background:${color}22; color:${color}; border:1px solid ${color}55;">${label}</span>
+            <div class="tip-body"><div class="tip-text">${row.tipText.replace(/</g, '&lt;')}</div></div>
+            <button class="tip-fav ${isFav ? 'active' : ''}" data-key="${row.tipKey}" data-site="${row.site}">${isFav ? '★' : '☆'}</button>
+          </div>
         `;
-        body.appendChild(tr);
+      }).join('');
+      list.querySelectorAll('.tip-fav').forEach((btn, idx) => {
+        const row = rows[idx];
+        btn.onclick = () => toggleFavorite(row.tipKey, row.tipText, row.site);
       });
     }
 
-    function openLogs() {
-      window.open('logs?ts=' + Date.now(), '_blank');
+    async function openLogs() {
+      const modal = document.getElementById('logs-modal');
+      const content = document.getElementById('logs-content');
+      modal.classList.add('open');
+      content.textContent = 'loading...';
+      try {
+        const res = await fetch('/logs?ts=' + Date.now());
+        content.textContent = await res.text();
+      } catch (err) {
+        content.textContent = 'Failed to load logs: ' + err;
+      }
+    }
+
+    function closeLogs() {
+      document.getElementById('logs-modal').classList.remove('open');
     }
 
     async function sendAction(action) {
-      if (action === 'restart_console') {
-        document.getElementById('action-result').textContent = 'Reloading console...';
-        window.location.reload();
-        return;
-      }
-      document.getElementById('action-result').textContent = 'waiting...';
-      const res = await fetch('api/action', {
+      document.getElementById('action-result').textContent = 'Sending ' + action + '...';
+      const res = await fetch('/api/action', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `action=${action}`
@@ -567,11 +899,16 @@ INDEX_HTML = r"""<!DOCTYPE html>
 
     async function refreshAll() {
       await fetchStatus();
+      await fetchFavorites();
       await fetchTips();
     }
 
     refreshAll();
-    setInterval(refreshAll, 5000);
+    setInterval(refreshAll, 6000);
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
   </script>
 </body>
 </html>

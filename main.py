@@ -3,39 +3,43 @@ import os
 import re
 import time
 import difflib
-from datetime import datetime, timedelta
+import builtins
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from playwright.sync_api import sync_playwright
 
 from notify import send_message
 
+ATHENS_TZ = ZoneInfo("Europe/Athens")
+_original_print = builtins.print
+
+
+def _timestamped_print(*args, **kwargs):
+    ts = datetime.now(ATHENS_TZ).strftime("%Y-%m-%d %H:%M:%S")
+    _original_print(f"[{ts}]", *args, **kwargs)
+
+
+builtins.print = _timestamped_print
+
 #print("Script started", flush=True)
 #print("Script Started")
-# Clears old entries from previous days from the log file, keeping today's
-# entries plus a small buffer of previous days (tips scraped the night
-# before a match are stamped with the previous day's date, so a strict
-# "today only" filter was deleting them before the match ever happened).
-def clear_log_daily(log_file, keep_days=1):
+# Clears old entries from previous days from the log file, keeping all of today's entries
+def clear_log_daily(log_file):
     if os.path.exists(log_file):
         try:
             with open(log_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
         except Exception:
             data = {}
-
-        cutoff = datetime.today().date() - timedelta(days=keep_days)
+        
+        today_str = datetime.today().strftime("%Y-%m-%d")
         updated_data = {}
-
-        # Only keep log entries from the cutoff date onward
+        
+        # Only keep log entries that were stored today
         for key, val in data.items():
-            if not isinstance(val, dict) or not val.get("date"):
-                continue
-            try:
-                entry_date = datetime.strptime(val["date"], "%Y-%m-%d").date()
-            except ValueError:
-                continue
-            if entry_date >= cutoff:
+            if isinstance(val, dict) and val.get("date") == today_str:
                 updated_data[key] = val
-
+                
         with open(log_file, "w", encoding="utf-8") as f:
             json.dump(updated_data, f, ensure_ascii=False, indent=2)
 
@@ -65,6 +69,37 @@ FAILURE_STATE_FILE = "url_failures.json"
 FAILURE_THRESHOLD = 2
 #FAILURE_COOLDOWN_SECONDS = 6 * 3600
 FAILURE_COOLDOWN_SECONDS = 1 * 3600
+
+LOCK_FILE = "scrape.lock"
+LOCK_STALE_SECONDS = 600  # 10 minutes — a run should never take this long
+
+
+def acquire_lock():
+    """Create an exclusive lock file. Returns True if acquired, False if
+    another scrape is already in progress. Auto-clears stale locks left
+    behind by a crashed run."""
+    try:
+        fd = os.open(LOCK_FILE, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        os.write(fd, str(os.getpid()).encode())
+        os.close(fd)
+        return True
+    except FileExistsError:
+        try:
+            age = time.time() - os.path.getmtime(LOCK_FILE)
+            if age > LOCK_STALE_SECONDS:
+                print(f"Lock file is stale ({int(age)}s old) — clearing it.", flush=True)
+                os.remove(LOCK_FILE)
+                return acquire_lock()
+        except Exception:
+            pass
+        return False
+
+
+def release_lock():
+    try:
+        os.remove(LOCK_FILE)
+    except Exception:
+        pass
 
 def load_failure_state(file_name):
     if os.path.exists(file_name):
@@ -125,6 +160,75 @@ def get_compare_text(text, lines_to_trim):
     normalized = "\n".join([line.strip() for line in trimmed.splitlines() if line.strip()])
     return normalized
 
+
+def parse_sportbet_hero(raw_text):
+    """Extract a compact 'League | Match | Time | Pick | Odds' line from
+    sportbet.gr's hero tip block (div.sb-fc-heroWrap).
+
+    Raw block looks like:
+        ΔΥΝΑΤΟ ΗΜΕΡΑΣ
+        Champions League
+        ΛΥΩΝ – ΣΠΑΡΤΑ ΠΡΑΓΑΣ
+        Σήμερα 22:00
+        κλείνει σε 42′
+        ΛΥΩΝ
+        ΤΕΛΙΚΟ ΑΠΟΤΕΛΕΣΜΑ
+        <long analysis paragraph>
+        1.57
+        ΑΠΟΔΟΣΗ
+        Παίξε
+        ΕΕΕΠ | 21+ | ΠΑΙΞΕ ΥΠΕΥΘΥΝΑ
+    """
+    lines = [l.strip() for l in raw_text.splitlines() if l.strip()]
+    if not lines:
+        return ""
+
+    if lines[0] == "ΔΥΝΑΤΟ ΗΜΕΡΑΣ":
+        lines = lines[1:]
+    if not lines:
+        return ""
+
+    league = lines[0]
+
+    match_line = next((l for l in lines if "–" in l or " - " in l), "")
+
+    time_str = ""
+    for l in lines:
+        if "κλείνει" in l:
+            continue
+        m = re.search(r"(\d{1,2}:\d{2})", l)
+        if m:
+            time_str = m.group(1)
+            break
+
+    odds = ""
+    for l in lines:
+        m = re.match(r"^(\d+\.\d{2})$", l)
+        if m:
+            odds = m.group(1)
+            break
+
+    skip_exact = {league, match_line, "ΑΠΟΔΟΣΗ", "Παίξε"}
+    candidates = []
+    for l in lines:
+        if l in skip_exact:
+            continue
+        if "κλείνει" in l or "Σήμερα" in l:
+            continue
+        if l.startswith("ΕΕΕΠ"):
+            continue
+        if re.match(r"^\d{1,2}:\d{2}$", l):
+            continue
+        if re.match(r"^\d+\.\d{2}$", l):
+            continue
+        candidates.append(l)
+
+    pick = " ".join(candidates[:2]) if candidates else ""
+
+    parts = [p for p in [league, match_line, time_str, pick, odds] if p]
+    return " | ".join(parts)
+
+
 def format_content(url, contents):
     """Format scraped content based on site-specific requirements"""
     if not contents:
@@ -138,6 +242,10 @@ def format_content(url, contents):
     elif 'bethome.gr' in url:
         text_parts = " ".join(contents).split()
         return " ".join(text_parts[:-1]) if text_parts else ""
+
+    # sportbet: single hero block, extract League | Match | Time | Pick | Odds
+    elif 'sportbet.gr' in url:
+        return parse_sportbet_hero(contents[0]) if contents else ""
 
     # Default: join with newlines
     else:
@@ -169,6 +277,21 @@ def select_kingbet_today_tab(page, url):
         print(f"Kingbet page load failed for {url}: {exc}", flush=True)
         return False, True
 
+    def remove_cookie_overlay():
+        try:
+            page.evaluate(
+                """
+                document.querySelectorAll(
+                    '#qc-cmp2-container, .qc-cmp-cleanslate, .qc-cmp2-summary-buttons'
+                ).forEach(el => el.remove());
+                document.body.style.overflow = 'auto';
+                """
+            )
+        except Exception:
+            pass
+
+    remove_cookie_overlay()
+
     def js_click(locator):
         locator.evaluate(
             """
@@ -182,17 +305,10 @@ def select_kingbet_today_tab(page, url):
 
     def wait_for_kingbet_selection(slide_selector, before_match_text):
         try:
-            # Dismiss cookie banner first (it blocks all clicks)
-            for cookie_sel in ['button:has-text("ΣΥΜΦΩΝΩ")', 'button:has-text("Συμφωνώ")', '[aria-label*="Agree"]']:
-                try:
-                    btn = page.query_selector(cookie_sel)
-                    if btn:
-                        btn.click()
-                        page.wait_for_timeout(1000)
-                        break
-                except:
-                    pass
-            
+            # Overlay already removed via JS before this point, but remove
+            # again in case a fresh consent popup appeared after navigation.
+            remove_cookie_overlay()
+
             # Click today's slide directly
             today_iso = datetime.today().date().isoformat()
             slide = page.query_selector(f'[data-date="{today_iso}"]')
@@ -493,8 +609,14 @@ def check_sites():
 
 def main():
     # Entry point for the script
-    print("Starting bot...", flush=True)
-    check_sites()
+    if not acquire_lock():
+        print("Another scrape is already in progress — skipping this run to avoid duplicate sends.", flush=True)
+        return
+    try:
+        print("Starting bot...", flush=True)
+        check_sites()
+    finally:
+        release_lock()
 
 if __name__ == "__main__":
     main()

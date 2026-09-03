@@ -8,6 +8,7 @@ services:
       - .env
     environment:
       PYTHONUNBUFFERED: "1"
+      TZ: Europe/Athens
       MATCHBOT_OUTPUT_DIR: ${MATCHBOT_OUTPUT_DIR:-/matchbot}
       SCRAPE_INTERVAL_SECONDS: ${SCRAPE_INTERVAL_SECONDS:-3600}
       TGINFO_PATH: ${TGINFO_PATH:-/app/tginfo.txt}
@@ -27,6 +28,7 @@ services:
       - "${STATUS_PORT:-8001}:8001"
     environment:
       PYTHONUNBUFFERED: "1"
+      TZ: Europe/Athens
       RUNTIME: docker
       DOCKER_SCRAPER_CONTAINER: myweb_scraper
       STATUS_PORT: "8001"
@@ -44,6 +46,7 @@ services:
       - "${HOMEPAGE_PORT:-6969}:6969"
     environment:
       PYTHONUNBUFFERED: "1"
+      TZ: Europe/Athens
       HOMEPAGE_PORT: "6969"
     volumes:
       - ./:/app
