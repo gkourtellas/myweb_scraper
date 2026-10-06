@@ -43,6 +43,8 @@ HOME_HTML = r"""<!DOCTYPE html>
     .button:hover { transform: translateY(-2px); background: #b23a11; }
     .button.secondary { background: rgba(255,255,255,0.08); color: var(--text); }
     .bookmarks { display: grid; gap: 12px; margin-top: 18px; }
+    .server-group { border-radius: 18px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 16px; }
+    .server-header { font-weight: bold; padding: 8px 12px; background: var(--accent-soft); border-radius: 8px; margin-bottom: 8px; }
     .bookmark { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border-radius: 18px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: var(--text); text-decoration: none; }
     .bookmark span { color: var(--muted); }
     .bookmark-buttons { display: flex; gap: 10px; }
@@ -69,7 +71,9 @@ HOME_HTML = r"""<!DOCTYPE html>
       <section class="panel">
         <h2>Navigation</h2>
         <div class="bookmarks" id="bookmark-list">
-          <div class="bookmark" style="justify-content: center; color: var(--muted);">No bookmarks added yet.</div>
+          <div class="server-group">
+            <div class="server-header">No bookmarks added yet.</div>
+          </div>
         </div>
         <div class="button-row" style="margin-top: 18px;">
           <button class="button secondary" onclick="addBookmark()">Add Bookmark</button>
@@ -107,39 +111,71 @@ HOME_HTML = r"""<!DOCTYPE html>
       list.innerHTML = '';
       if (!bookmarks.length) {
         const placeholder = document.createElement('div');
-        placeholder.className = 'bookmark';
-        placeholder.style.justifyContent = 'center';
-        placeholder.style.color = 'var(--muted)';
-        placeholder.textContent = 'No bookmarks added yet.';
+        placeholder.className = 'server-group';
+        const header = document.createElement('div');
+        header.className = 'server-header';
+        header.textContent = 'No bookmarks added yet.';
+        placeholder.appendChild(header);
         list.appendChild(placeholder);
         return;
       }
-      bookmarks.forEach((bookmark, index) => {
-        const item = document.createElement('div');
-        item.className = 'bookmark';
-        const link = document.createElement('a');
-        link.href = bookmark.url;
-        link.target = '_blank';
-        link.rel = 'noopener';
-        link.style.color = 'inherit';
-        link.style.textDecoration = 'none';
-        link.innerHTML = `<span>${bookmark.title}</span>`;
-        const controls = document.createElement('div');
-        controls.className = 'bookmark-buttons';
-        const edit = document.createElement('button');
-        edit.className = 'bookmark-button';
-        edit.textContent = 'Edit';
-        edit.onclick = () => editBookmark(index);
-        const remove = document.createElement('button');
-        remove.className = 'bookmark-button';
-        remove.textContent = 'Remove';
-        remove.onclick = () => removeBookmark(index);
-        controls.appendChild(edit);
-        controls.appendChild(remove);
-        item.appendChild(link);
-        item.appendChild(controls);
-        list.appendChild(item);
-      });
+
+      const grouped = bookmarks.reduce((acc, bookmark) => {
+        const server = extractServerFromUrl(bookmark.url);
+        if (!acc[server]) {
+          acc[server] = [];
+        }
+        acc[server].push(bookmark);
+        return acc;
+      }, {});
+
+      for (const [server, group] of Object.entries(grouped)) {
+        const serverGroup = document.createElement('div');
+        serverGroup.className = 'server-group';
+
+        const header = document.createElement('div');
+        header.className = 'server-header';
+        header.textContent = server;
+        serverGroup.appendChild(header);
+
+        group.forEach((bookmark, index) => {
+          const item = document.createElement('div');
+          item.className = 'bookmark';
+          const link = document.createElement('a');
+          link.href = bookmark.url;
+          link.target = '_blank';
+          link.rel = 'noopener';
+          link.style.color = 'inherit';
+          link.style.textDecoration = 'none';
+          link.innerHTML = `<span>${bookmark.title}</span>`;
+          const controls = document.createElement('div');
+          controls.className = 'bookmark-buttons';
+          const edit = document.createElement('button');
+          edit.className = 'bookmark-button';
+          edit.textContent = 'Edit';
+          edit.onclick = () => editBookmark(index, server);
+          const remove = document.createElement('button');
+          remove.className = 'bookmark-button';
+          remove.textContent = 'Remove';
+          remove.onclick = () => removeBookmark(index, server);
+          controls.appendChild(edit);
+          controls.appendChild(remove);
+          item.appendChild(link);
+          item.appendChild(controls);
+          serverGroup.appendChild(item);
+        });
+
+        list.appendChild(serverGroup);
+      }
+    }
+
+    function extractServerFromUrl(url) {
+      try {
+        const parsed = new URL(url);
+        return parsed.hostname || 'Unknown Server';
+      } catch (e) {
+        return 'Unknown Server';
+      }
     }
 
     async function loadBookmarks() {
@@ -178,7 +214,7 @@ HOME_HTML = r"""<!DOCTYPE html>
       renderBookmarks();
     }
 
-    async function editBookmark(index) {
+    async function editBookmark(index, server) {
       const bookmark = bookmarks[index];
       const title = window.prompt('Bookmark title', bookmark.title);
       if (!title || !title.trim()) return;
@@ -189,7 +225,7 @@ HOME_HTML = r"""<!DOCTYPE html>
       renderBookmarks();
     }
 
-    async function removeBookmark(index) {
+    async function removeBookmark(index, server) {
       if (!confirm('Remove this bookmark?')) return;
       bookmarks.splice(index, 1);
       await saveBookmarks();
